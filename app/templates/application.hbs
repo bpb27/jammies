@@ -1,6 +1,10 @@
 {{#if session.isAuthenticated}}
   	<div class="navbar">
-  		<div class="navbar-left"></div>
+  		<div class="navbar-left">
+  			<div class="brand">The Jams</div>
+  			<div class="navbar-link">{{#link-to "music"}}Music{{/link-to}}</div>
+  			<div class="navbar-link">{{#link-to "users"}}Users{{/link-to}}</div>
+  		</div>
   		<div class="navbar-right">
   			<div class="user-status">
   				<div>{{session.currentUser.displayName}}</div>

@@ -1,3 +1,7 @@
+* {
+    font-family: Raleway;
+}
+
 h2 {
 	color: blue;
 }
@@ -9,10 +13,26 @@ h2 {
     width: 100%;
     background-color: black;
     color: white;
+    font-family: 'Raleway', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
 
     .navbar-left, .navbar-right {
     	display: inline-block;
     	height: 50px;
+    }
+
+    .navbar-left {
+    	div {
+    		display: inline-block;
+            padding: 15px;
+            cursor: pointer;
+
+    		a {
+    			text-decoration: none;
+    			color: white;
+    		}
+    	}
     }
 
     .navbar-right {
@@ -42,5 +62,14 @@ h2 {
 
 .page-content {
 	padding-top: 80px;
+}
+
+.video-background {
+    position: fixed; right: 0; bottom: 0;
+    min-width: 100%; min-height: 100%;
+    width: auto; height: auto; z-index: -100;
+    opacity: 0.9;
+    background: no-repeat;
+    background-size: cover;
 }
 
