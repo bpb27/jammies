@@ -1,3 +1,17 @@
-<h2 id="title">Welcome to Ember</h2>
-
-{{outlet}}
+{{#if session.isAuthenticated}}
+  	<div class="navbar">
+  		<div class="navbar-left"></div>
+  		<div class="navbar-right">
+  			<div class="user-status">
+  				<div>{{session.currentUser.displayName}}</div>
+  				<img class="profile-picture" src={{{session.currentUser.profileImageURL}}}>
+  				<button {{action "signOut"}}>Logout</button>
+  			</div>
+  		</div>
+  	</div>
+	<div class="page-content">
+		{{outlet}}
+	</div>
+{{else}}
+  	<button {{action "signIn" "google"}}>Sign in with Google</button>
+{{/if}}
