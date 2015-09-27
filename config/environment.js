@@ -7,9 +7,9 @@ module.exports = function(environment) {
     
     contentSecurityPolicy: {
       'connect-src': "'self' https://auth.firebase.com wss://*.firebaseio.com https://api.spotify.com", 
-      'font-src': "'self' data: fonts.gstatic.com",
+      'font-src': "'self' data: fonts.gstatic.com https://maxcdn.bootstrapcdn.com/",
       'img-src': "'self' https://i.scdn.co/image/ https://lh3.googleusercontent.com",
-      'style-src': "'self' 'unsafe-inline' fonts.googleapis.com",
+      'style-src': "'self' 'unsafe-inline' fonts.googleapis.com https://maxcdn.bootstrapcdn.com",
       'frame-src': "'self' https://*.firebaseio.com https://embed.spotify.com https://www.youtube.com/embed/",
       'script-src': "'self' 'unsafe-eval' https://*.firebaseio.com"
     },

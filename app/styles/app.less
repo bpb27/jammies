@@ -2,63 +2,22 @@
     font-family: Raleway;
 }
 
-h2 {
-	color: blue;
-}
-
-.navbar {
-	position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: black;
-    color: white;
+.navbar {   
     font-family: 'Raleway', sans-serif;
-    font-size: 14px;
+    font-size: 11px;
     font-weight: 300;
-
-    .navbar-left, .navbar-right {
-    	display: inline-block;
-    	height: 50px;
+    
+    .navbar-nav li {
+        cursor: pointer;
     }
 
-    .navbar-left {
-    	div {
-    		display: inline-block;
-            padding: 15px;
-            cursor: pointer;
-
-    		a {
-    			text-decoration: none;
-    			color: white;
-    		}
-    	}
+    .profile-picture {
+        height: 45px;
+        padding-top: 3px;
+        padding-left: 10px;
     }
-
-    .navbar-right {
-    	float: right;
-
-    	.user-status {
-    		div {
-    			display: inline-block;
-    			vertical-align: top;
-			    padding-top: 20px;
-			    padding-right: 20px;
-    		}
-
-    		.profile-picture {
-				height: 50px;
-			}
-
-			button {
-				vertical-align: top;
-			    margin-top: 20px;
-			    border: none;
-			    margin: 20px 10px;
-			}
-    	}
-    } 
 }
+
 
 .page-content {
 	padding-top: 80px;
@@ -73,3 +32,23 @@ h2 {
     background-size: cover;
 }
 
+    
+.jumbotron {
+    text-align: center;
+    background-color: rgba(253, 255, 255, 0.42);
+    width: 100%;
+
+    .signed-in-btn, .sign-in-btn {
+        width: 80%;
+        margin-top: 30px;
+        height: 42px;
+        font-size: 20px;
+        font-weight: 200;
+    }
+
+    .signed-in-btn {
+        color: white;
+        background-color: rgb(169, 85, 85);
+    }
+
+}

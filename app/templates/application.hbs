@@ -1,21 +1,25 @@
-{{#if session.isAuthenticated}}
-  	<div class="navbar">
-  		<div class="navbar-left">
-  			<div class="brand">The Jams</div>
-  			<div class="navbar-link">{{#link-to "music"}}Music{{/link-to}}</div>
-  			<div class="navbar-link">{{#link-to "users"}}Users{{/link-to}}</div>
-  		</div>
-  		<div class="navbar-right">
-  			<div class="user-status">
-  				<div>{{session.currentUser.displayName}}</div>
-  				<img class="profile-picture" src={{{session.currentUser.profileImageURL}}}>
-  				<button {{action "signOut"}}>Logout</button>
-  			</div>
-  		</div>
-  	</div>
-	<div class="page-content">
-		{{outlet}}
-	</div>
-{{else}}
-  	<button {{action "signIn" "google"}}>Sign in with Google</button>
-{{/if}}
+<nav class="navbar navbar-inverse navbar-fixed-top">
+   <div class="container">
+         {{#link-to 'index' class='navbar-brand'}}THE JAMS{{/link-to}}
+         {{#if session.isAuthenticated}}
+            <ul class="nav navbar-nav">
+               <li>{{#link-to 'music'}}Songs{{/link-to}}</li>
+               <li>{{#link-to 'users'}}Users{{/link-to}}</li>
+               <li {{action 'closePlayer'}}><a>Close Player</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+               <img class="profile-picture" src={{{session.currentUser.profileImageURL}}}>
+               <li>{{#link-to 'users'}}{{session.currentUser.displayName}}{{/link-to}}</li>
+               <li {{action 'signOut'}}><a>Logout</a></li>
+            </ul>
+         {{/if}}
+   </div>
+</nav>
+
+<div class="page-content">
+   {{outlet}}
+</div>
+
+<div class="audio-player-container">
+   <div class="audio-player {{if isPlaying 'is-playing' 'hide'}} {{playType}}"></div>
+</div>

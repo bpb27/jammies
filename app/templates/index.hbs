@@ -1,1 +1,11 @@
 <video class="video-background" autoplay loop><source src="assets/videos/titusa.mp4"></video>
+<div class="jumbotron">
+	<h1>The Jams</h1>
+	{{#if session.isAuthenticated}}
+		{{#link-to 'music'}}
+			<button class="btn signed-in-btn">You're signed in. Jam away.</button>
+		{{/link-to}}
+	{{else}}
+		<button {{action 'signIn' 'google'}} class="btn btn-primary sign-in-btn">Sign in with Google</button>
+	{{/if}}
+</div>
