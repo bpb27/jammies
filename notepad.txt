@@ -1,6 +1,7 @@
 TODO:
-- Bootstrap JS
-- Save user data on first sign in
+- Cleanup tag data (most recent don't have music prop)
+- Figure out new user model
+	- Push favorites this time
 
 Using github:
 

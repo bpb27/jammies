@@ -1,14 +1,18 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
+	
+	defaultImage: 'assets/images/vinylcover.jpg',
+	formFields: ['album', 'artist', 'comment', 'image', 'title', 'selectedType', 'year', 'spotify', 'youtube', 'soundcloud'],
+	image: 'assets/images/vinylcover.jpg',
 	selectedType: 'Song',
 	types: ['Song', 'Live Performance', 'Music Video'],
 
 	clearForm: function () {
-		var fields = ['album', 'artist', 'comment', 'image', 'title', 'selectedType', 'year', 'spotify', 'youtube', 'soundcloud'];
-		fields.forEach(function(field){
+		this.get('formFields').forEach(function(field){
 			this.set(field, '');
 		}.bind(this));
+		this.set('image', this.get('defaultImage'));
 	},
 
 	determineSpotifyLink: function () {
@@ -57,11 +61,14 @@ export default Ember.Controller.extend({
 	},
 
 	saveRecord: function (data) {
-		var song = this.store.createRecord('music', data);
-		song.save().then(function(){
-			this.clearForm();
-			this.transitionToRoute('songs');
-		}.bind(this));
+		console.log(data);
+		this.clearForm();
+
+		// var song = this.store.createRecord('music', data);
+		// song.save().then(function(){
+		// 	this.clearForm();
+		// 	this.transitionToRoute('songs');
+		// }.bind(this));
 	},
 
 	spotifyAPI: function () {
@@ -117,7 +124,7 @@ export default Ember.Controller.extend({
 		
 		discard: function () {
 			this.clearForm();
-			this.transitionToRoute('songs');
+			this.transitionToRoute('music');
 		}
 	}
 

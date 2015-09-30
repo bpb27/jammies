@@ -21,7 +21,7 @@ export default Ember.Route.extend({
 
 			if (userIdToUpdate) {
 				this.store.findRecord('user', userIdToUpdate).then(function(model){
-					model.set('gString', id);
+					model.set('gId', id);
 					model.set('displayName', name);
 					model.save().then(function(results){
 						console.log("Success", results);

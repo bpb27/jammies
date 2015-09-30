@@ -18,6 +18,7 @@
 			}}
 		</div>
 		<div class="sorting-btn-container">
+			{{#link-to 'submission.song'}}<button class="btn sorting-btn">Add Tunes</button>{{/link-to}}
 			<button class="btn sorting-btn play-all-btn" {{action 'playAll'}}>Play All</button>
 			<div class="dropdown">
 				<a id="dLabel" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">
@@ -48,17 +49,12 @@
 	<div class="page-body">
 		<ul>
 			{{#each filteredContent as |song index|}}
-		    	<p>{{index}}) {{song.title}} by {{song.artist}}</p>
+		    	<h4>{{index}}) {{song.title}} by {{song.artist}}</h4>
 		    	<ul>
 			    	{{#each song.tags as |tag|}}
-			    		<li>{{tag.name}}</li>
+			    		<li>{{tag.name}} {{tag.tally}}</li>
 			    	{{/each}}
-				</ul>
-				<ul>
-			    	{{#each song.comments as |comment|}}
-			    		<li>{{comment.postedBy}}: {{comment.comment}}</li>
-			    	{{/each}}
-				</ul>
+			    </ul>
 		  	{{/each}}
 		</ul>
 	</div>
