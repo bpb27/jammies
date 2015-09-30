@@ -1,0 +1,26 @@
+<div class="container song-form page-body">
+	<div class="col-md-3">
+		<img src="assets/images/vinylcover.jpg" />
+		<button class="btn btn-success form-control" {{action 'submit'}}>Submit</button>
+		<button class="btn btn-warning form-control" {{action 'discard'}}>Nevermind</button>
+	</div>
+	<div class="col-md-6">
+		<h6>For videos, choose music video or live performance:</h6>
+		{{view Ember.Select content=types value=selectedType class="form-control"}}
+		
+		<h6>Add at least one link:</h6>
+		{{input value=spotify placeholder="Spotify URI" class="form-control"}}
+		{{input value=youtube placeholder="YouTube Link" class="form-control"}}
+		{{input value=soundcloud placeholder="SoundCloud Embed Link" class="form-control"}}
+		
+		<h6>Why it's cool:</h6>
+		{{textarea value=comment placeholder="Your thoughts..." class="form-control"}}
+
+		<h6>Add a Spotify URI, and this will automatically populate:</h6>
+		{{input value=title placeholder="Title" class="form-control"}}
+		{{input value=artist placeholder="Artist" class="form-control"}}
+		{{input value=album placeholder="Album" class="form-control"}}
+		{{input value=year placeholder="Year" class="form-control"}}
+		
+	</div>
+</div>

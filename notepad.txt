@@ -1,3 +1,7 @@
+TODO:
+- Bootstrap JS
+- Save user data on first sign in
+
 Using github:
 
 1) Make changes

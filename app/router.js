@@ -9,6 +9,9 @@ Router.map(function() {
   this.route('users');
   this.route('user', { path: '/user/:user_id' });
   this.route('music');
+  this.route('submission', function() {
+    this.route('song');
+  });
 });
 
 export default Router;

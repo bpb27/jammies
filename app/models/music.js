@@ -1,22 +1,70 @@
 import DS from 'ember-data';
 
 export default DS.Model.extend({
-	type: DS.attr('string'),
-	title: DS.attr('string'),
-	artist: DS.attr('string'),
+	// Song data
 	album: DS.attr('string'),
+	artist: DS.attr('string'),
+	comment: DS.attr('string'),
+	createdAt: DS.attr('date'),
+	image: DS.attr('string'),
+	title: DS.attr('string'),
+	totalPlays: DS.attr('number'),
+	type: DS.attr('string'),
 	year: DS.attr('number'),
-	review: DS.attr('string'),
-	youTubeLink: DS.attr('string'),
-	spotifyLink: DS.attr('string'),
+	
+	// Link data
+	albumLink: DS.attr('string'),
 	soundCloudLink: DS.attr('string'),
-	links: DS.attr('string'),
-	linkType: DS.attr('string'),
+	spotifyLink: DS.attr('string'),
+	youTubeLink: DS.attr('string'),
+	
+	// User data
 	submittedBy: DS.attr('string'),
 	submittedByEmail: DS.attr('string'),
 	submittedByID: DS.attr('string'),
-	createdAt: DS.attr('date'),
+	
+	// HasMany data
 	comments: DS.hasMany('comment', { async: true }),
 	tags: DS.hasMany('tag', { async: true }),
-	totalPlays: DS.attr('number')
+	
+	// Computed properties
+	hasVideo: function () {
+		return this.get('type') !== 'Song';
+	}.property('type'),
+
+	linkType: function () {
+		if (this.get('spotifyLink')) return 'spotify';
+		else if (this.get('youTubeLink')) return 'youtube';
+		else if (this.get('soundCloudLink')) return 'soundcloud';
+		else return false;
+	}.property('spotifyLink', 'soundCloudLink', 'youTubeLink'),
+
+	parsedYouTubeLink: function () {
+		var link = this.get('youTubeLink');
+		if (link) {
+			if (link.length < 15)
+				return link;
+			return link.split('=')[1];
+		}
+	}.property('youTubeLink'),
+
+	primaryLink: function () {
+		if (this.get('linkType') === 'spotify') return this.get('spotifyLink');
+		else if (this.get('linkType') === 'youtube') return this.get('youTubeLink');
+		else if (this.get('linkType') === 'soundcloud') return this.get('soundCloudLink');
+		else return false;
+	}.property('linkType'),
+
+	spotifyId: function () {
+		if (this.get('spotifyLink'))
+			return this.get('spotifyLink').split(':')[2];
+	}.property('spotifyLink'),
+
+	updatedAt: function () {
+		return this.get('comments').map(function(comment){
+			return comment.get('createdAt');
+		})
+		.sort()
+		.objectAt(0);
+	}.property('comments.@each')
 });

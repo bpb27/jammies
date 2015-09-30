@@ -1,16 +1,67 @@
-<ul>
-  {{#each model as |song index|}}
-    <p>{{index}}) {{song.title}} by {{song.artist}}</p>
-    <p>{{song.review}}</p>
-    <ul>
-	    {{#each song.tags as |tag|}}
-	    	<li>{{tag.name}}</li>
-	    {{/each}}
-	</ul>
-	<ul>
-	    {{#each song.comments as |comment|}}
-	    	<li>{{comment.postedBy}}: {{comment.comment}}</li>
-	    {{/each}}
-	</ul>
-  {{/each}}
-</ul>
+<div id="page-songs">
+	<img class="image-background" src="assets/images/sam-cooke.png" />
+
+	<div class="color-bar">
+		<div class="color-bar-single cbs-one"></div>
+		<div class="color-bar-single cbs-two"></div>
+		<div class="color-bar-single cbs-three"></div>
+		<div class="color-bar-single cbs-four"></div>
+	</div>
+
+	<div class="control-bar">
+  		<div class="search-container">
+			{{input 
+				type=text 
+				value=query 
+				class='search-box'
+				placeholder='Search title, artist, album, tags, user...'
+			}}
+		</div>
+		<div class="sorting-btn-container">
+			<button class="btn sorting-btn play-all-btn" {{action 'playAll'}}>Play All</button>
+			<div class="dropdown">
+				<a id="dLabel" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">
+					<button class="btn sorting-btn">
+						Show Only
+						<span class="caret"></span>
+					</button>
+				</a>
+				<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+					<li {{action 'showOnly' 'showOnlyFavorites'}}>Favorites</li>
+					<li {{action 'showOnly' 'showOnlyVideos'}}>Videos</li>
+				</ul>
+			</div>
+			<div class="dropdown">
+				<a id="dLabel" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">
+					<button class="btn sorting-btn">Sort By<span class="caret"></span></button>
+				</a>
+				<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+					<li {{action 'sortBy' 'artist'}}>Artist</li>
+					<li {{action 'sortBy' 'createdAt'}}>Date Added</li>
+					<li {{action 'sortBy' 'submittedBy'}}>Submitted By</li>
+					<li {{action 'sortBy' 'year'}}>Year</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="page-body">
+		<ul>
+			{{#each filteredContent as |song index|}}
+		    	<p>{{index}}) {{song.title}} by {{song.artist}}</p>
+		    	<ul>
+			    	{{#each song.tags as |tag|}}
+			    		<li>{{tag.name}}</li>
+			    	{{/each}}
+				</ul>
+				<ul>
+			    	{{#each song.comments as |comment|}}
+			    		<li>{{comment.postedBy}}: {{comment.comment}}</li>
+			    	{{/each}}
+				</ul>
+		  	{{/each}}
+		</ul>
+	</div>
+
+</div>
+
