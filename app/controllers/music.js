@@ -21,12 +21,13 @@ export default Ember.Controller.extend({
     	var query = Ember.String.htmlSafe(this.get('query')).string;
     	var rx = new RegExp(query, 'gi');
       var songs = music.filter(function(song) {
-         return this.queryMatch(song, rx);   
+         if (this.showOnlyMatch(song))
+            return this.queryMatch(song, rx);   
       }.bind(this));
 
       return this.sortAndLimitModel(songs);
 
-  	}.property('model.isUpdating', 'query', 'sortProperties.[]', 'sortAscending'),
+  	}.property('model.isUpdating', 'query', 'sortProperties.[]', 'sortAscending', 'showOnlyFavorites', 'showOnlyVideos'),
 
   	queryMatch: function (song, rx) {
   		if (this.validModel(song)) {
@@ -38,6 +39,16 @@ export default Ember.Controller.extend({
 	      		|| song.get('type').toString().match(rx));
   		}    	
   	},
+
+   showOnlyMatch: function (song) {
+      if (this.get('showOnlyVideos') && !song.get('hasVideo')) 
+         return;
+      if (this.get('showOnlyFavorites') && this.get('userProfiles.user.favorites').indexOf(song.get('id')) === -1) 
+         return;
+
+      return true;
+
+   },
 
   	sortAndLimitModel: function (model) {
   		model = model.sortBy(this.get('sortProperties')[0]);
@@ -60,7 +71,12 @@ export default Ember.Controller.extend({
   	},
 
   	actions: {
-  		sortBy: function (property) {
+  		showOnly: function (property) {
+         this.get(property) ? this.set(property, false) : this.set(property, true);
+         this.set(property === 'showOnlyFavorites' ? 'showOnlyVideos' : 'showOnlyFavorites', false);
+      },
+
+      sortBy: function (property) {
   			if (this.get('sortProperties')[0] === property)
   				this.set('sortAscending', !this.get('sortAscending'));
   			else

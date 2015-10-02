@@ -3,10 +3,13 @@ import Ember from 'ember';
 export default Ember.Controller.extend({
 	
 	defaultImage: 'assets/images/vinylcover.jpg',
-	formFields: ['album', 'artist', 'comment', 'image', 'title', 'selectedType', 'year', 'spotify', 'youtube', 'soundcloud'],
+	formFields: ['album', 'artist', 'review', 'image', 'title', 'selectedType', 'year', 'spotify', 'youtube', 'soundcloud'],
 	image: 'assets/images/vinylcover.jpg',
-	selectedType: 'Song',
-	types: ['Song', 'Live Performance', 'Music Video'],
+	userProfiles: Ember.inject.service(),
+
+	_setup: function () {
+      	this.get('userProfiles.user'); //necessary to trigger fetchUser, which returns a promise
+   	}.on('init'),
 
 	clearForm: function () {
 		this.get('formFields').forEach(function(field){
@@ -39,11 +42,11 @@ export default Ember.Controller.extend({
 			album: this.get('album'),
 			artist: this.get('artist'),
 			createdAt: new Date(),
-			comment: this.get('comment'),
+			review: this.get('review'),
 			image: this.get('image'),
 			title: this.get('title'),
 			totalPlays: 1,
-			type: this.get('selectedType'),
+			video: this.get('hasVideo'),
 			year: this.get('year'),
 			
 			//Links
@@ -54,6 +57,7 @@ export default Ember.Controller.extend({
 
 			//User data
 			submittedBy: this.get('session.currentUser.displayName'),
+			submittedByID: this.get('userProfiles.user.id')
 			//submittedByEmail: this.get('session.userProfile.email'),
 			//submittedByID: this.get('session.userProfile.id')
 		
@@ -98,6 +102,8 @@ export default Ember.Controller.extend({
 				this.set('year', year);
 			}.bind(this));
 
+			Ember.$('textarea').focus();
+
 		}.bind(this), function(error){
 			console.log(error);
 		});
@@ -109,7 +115,7 @@ export default Ember.Controller.extend({
 			return alert('A link, madam.');
 		if (!record.title || !record.artist) 
 			return alert('Title and artist, madam.');
-		if (!record.comment) 
+		if (!record.review) 
 			return alert('Your review sir, if even just a word.');
 		return true;
 	},

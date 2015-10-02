@@ -5,16 +5,16 @@
 		<button class="btn btn-warning form-control" {{action 'discard'}}>Nevermind</button>
 	</div>
 	<div class="col-md-6">
-		<h6>For videos, choose music video or live performance:</h6>
-		{{view Ember.Select content=types value=selectedType class="form-control"}}
-		
 		<h6>Add at least one link:</h6>
 		{{input value=spotify placeholder="Spotify URI" class="form-control"}}
 		{{input value=youtube placeholder="YouTube Link" class="form-control"}}
+		{{#if youtube}}
+			<h5>Video? {{input type="checkbox" name="Video" checked=hasVideo}}</h5>
+		{{/if}}
 		{{input value=soundcloud placeholder="SoundCloud Embed Link" class="form-control"}}
 		
 		<h6>Why it's cool:</h6>
-		{{textarea value=comment placeholder="Your thoughts..." class="form-control"}}
+		{{textarea value=review placeholder="Your thoughts..." class="form-control"}}
 
 		<h6>Add a Spotify URI, and this will automatically populate:</h6>
 		{{input value=title placeholder="Title" class="form-control"}}

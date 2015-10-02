@@ -50,6 +50,9 @@
 		<ul>
 			{{#each filteredContent as |song index|}}
 		    	<h4>{{index}}) {{song.title}} by {{song.artist}}</h4>
+		    	{{#each song.comments as |comment|}}
+		    		<p><b>{{comment.postedBy}}</b> {{comment.comment}}</p>
+			    {{/each}}
 		    	<ul>
 			    	{{#each song.tags as |tag|}}
 			    		<li>{{tag.name}} {{tag.tally.content}}</li>

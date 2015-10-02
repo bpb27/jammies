@@ -10,6 +10,7 @@ export default DS.Model.extend({
 	title: DS.attr('string'),
 	totalPlays: DS.attr('number'),
 	type: DS.attr('string'),
+	video: DS.attr('boolean'),
 	year: DS.attr('number'),
 	
 	// Link data
@@ -29,8 +30,8 @@ export default DS.Model.extend({
 	
 	// Computed properties
 	hasVideo: function () {
-		return this.get('type') !== 'Song';
-	}.property('type'),
+		return this.get('video') || this.get('type') !== 'Song';
+	}.property('type', 'video'),
 
 	linkType: function () {
 		if (this.get('spotifyLink')) return 'spotify';
