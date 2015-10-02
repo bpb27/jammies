@@ -10,9 +10,13 @@ export default Ember.Controller.extend({
 	songLimit: 25,
 	sortAscending: true,
 	sortProperties: ['createdAt'],
+   userProfiles: Ember.inject.service(),
+
+   _setup: function () {
+      this.get('userProfiles.user'); //necessary to trigger fetchUser, which returns a promise
+   }.on('init'),
 
 	filteredContent: function () {
-
     	var music = this.get('model');
     	var query = Ember.String.htmlSafe(this.get('query')).string;
     	var rx = new RegExp(query, 'gi');

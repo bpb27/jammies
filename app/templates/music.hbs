@@ -52,7 +52,7 @@
 		    	<h4>{{index}}) {{song.title}} by {{song.artist}}</h4>
 		    	<ul>
 			    	{{#each song.tags as |tag|}}
-			    		<li>{{tag.name}} {{tag.tally}}</li>
+			    		<li>{{tag.name}} {{tag.tally.content}}</li>
 			    	{{/each}}
 			    </ul>
 		  	{{/each}}

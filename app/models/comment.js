@@ -5,5 +5,5 @@ export default DS.Model.extend({
 	postedBy: DS.attr('string'),
 	submittedByID: DS.attr('string'),
 	createdAt: DS.attr('date'),
-	music: DS.hasMany('music')
+	music: DS.hasMany('music', { async: true })
 });
