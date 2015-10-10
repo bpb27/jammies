@@ -48,9 +48,9 @@
 
 	<div class="page-body">
 		<div class="container">
-			<div class="row">
-				{{#each filteredContent as |song|}}
-					<div class="col-md-4">
+			{{#each filteredContent as |column|}}
+				<div class="col-md-4">
+					{{#each column as |song|}}
 						{{music-entry
 							song=song
 							favorite='favorite'
@@ -61,9 +61,9 @@
 			            	loadPlayer='loadPlayer'
 			            	playVideo='playVideo'
 						}}
-					</div>
-				{{/each}}
-			</div>
+					{{/each}}
+				</div>
+			{{/each}}
 		</div>
 	</div>
 

@@ -4,9 +4,9 @@ export default DS.Model.extend({
 	// Song data
 	album: DS.attr('string'),
 	artist: DS.attr('string'),
-	comment: DS.attr('string'),
 	createdAt: DS.attr('date'),
 	image: DS.attr('string'),
+	review: DS.attr('string'),
 	title: DS.attr('string'),
 	totalPlays: DS.attr('number'),
 	type: DS.attr('string'),
@@ -30,7 +30,9 @@ export default DS.Model.extend({
 	
 	// Computed properties
 	hasVideo: function () {
-		return this.get('video') || this.get('type') !== 'Song';
+		if (this.get('type') && this.get('type') !== 'Song')
+			return true;
+		return this.get('video');
 	}.property('type', 'video'),
 
 	linkType: function () {

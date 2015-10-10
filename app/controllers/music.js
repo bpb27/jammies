@@ -7,7 +7,7 @@ export default Ember.Controller.extend({
 	playAllLinks: '',
 	showOnlyFavorites: false,
 	showOnlyVideos: false,
-	songLimit: 25,
+	songLimit: 39,
 	sortAscending: true,
 	sortProperties: ['createdAt'],
    userProfiles: Ember.inject.service(),
@@ -15,6 +15,24 @@ export default Ember.Controller.extend({
    _setup: function () {
       this.get('userProfiles.user'); //necessary to trigger fetchUser, which returns a promise
    }.on('init'),
+
+   setMusicColumns: function (music) {
+      var one = [];
+      var two = [];
+      var three = [];
+
+      for (var i = 0; i < music.length; i++) {
+         if (one.length === two.length && one.length === three.length) 
+            one.push(music[i]);
+         else if (one.length > two.length) 
+            two.push(music[i]);
+         else 
+            three.push(music[i]);
+      }
+
+      return [one, two, three];
+
+   },
 
 	filteredContent: function () {
     	var music = this.get('model');
@@ -25,7 +43,10 @@ export default Ember.Controller.extend({
             return this.queryMatch(song, rx);   
       }.bind(this));
 
-      return this.sortAndLimitModel(songs);
+      songs = this.sortAndLimitModel(songs);
+      songs = this.setMusicColumns(songs);
+
+      return songs;
 
   	}.property('model.isUpdating', 'query', 'sortProperties.[]', 'sortAscending', 'showOnlyFavorites', 'showOnlyVideos'),
 
