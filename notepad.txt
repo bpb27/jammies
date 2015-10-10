@@ -1,7 +1,16 @@
 TODO:
+- Player
+- Test new song submission
 - Cleanup tag data (most recent don't have music prop)
-- Figure out new user model
-	- Push favorites this time
+- Push user favorites?
+- New user creation
+- Abstract spotify parses and ajax calls to service or model
+- Properly initialize userProfiles, still needs that bullshit first get
+- Auth control of all routes
+- Error system?
+- Last should be the component itself
+- Or maybe the tag artist columns
+
 
 Using github:
 

@@ -27,6 +27,9 @@ export default Ember.Route.extend({
 						console.log("Success", results);
 					});
 				});
+			} 
+			else {
+				//createUser
 			}
 
 		} catch (e) {

@@ -3,6 +3,9 @@
 		<img src="{{{image}}}" />
 		<button class="btn btn-success form-control" {{action 'submit'}}>Submit</button>
 		<button class="btn btn-warning form-control" {{action 'discard'}}>Nevermind</button>
+		{{#if error}}
+			<div class="error">{{error}}</div>
+		{{/if}}
 	</div>
 	<div class="col-md-6">
 		<h6>Add at least one link:</h6>

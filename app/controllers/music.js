@@ -35,8 +35,7 @@ export default Ember.Controller.extend({
 	      		|| song.get('artist').match(rx) 
 	      		|| song.get('album').match(rx) 
 	      		|| song.get('submittedBy').match(rx) 
-	      		|| song.get('year').toString().match(rx) 
-	      		|| song.get('type').toString().match(rx));
+	      		|| song.get('year').toString().match(rx));
   		}    	
   	},
 
@@ -61,18 +60,20 @@ export default Ember.Controller.extend({
   	},
 
   	validModel: function (model) {
-  		if (model.get('title') 
+      if (model.get('title') 
   			&& model.get('artist') 
   			&& model.get('album') 
   			&& model.get('submittedBy') 
-  			&& model.get('year') 
-  			&& model.get('type'))
+  			&& model.get('year'))
   			return true;
   	},
 
   	actions: {
   		showOnly: function (property) {
-         this.get(property) ? this.set(property, false) : this.set(property, true);
+         if (this.get(property))
+            this.set(property, false);
+         else
+            this.set(property, true);
          this.set(property === 'showOnlyFavorites' ? 'showOnlyVideos' : 'showOnlyFavorites', false);
       },
 

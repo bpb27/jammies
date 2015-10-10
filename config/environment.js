@@ -6,7 +6,7 @@ module.exports = function(environment) {
     environment: environment,
     
     contentSecurityPolicy: {
-      'connect-src': "'self' https://auth.firebase.com wss://*.firebaseio.com https://api.spotify.com", 
+      'connect-src': "'self' https://auth.firebase.com wss://*.firebaseio.com https://api.spotify.com https://content.googleapis.com", 
       'font-src': "'self' data: fonts.gstatic.com https://maxcdn.bootstrapcdn.com/",
       'img-src': "'self' https://i.scdn.co/image/ https://lh3.googleusercontent.com",
       'style-src': "'self' 'unsafe-inline' fonts.googleapis.com https://maxcdn.bootstrapcdn.com",

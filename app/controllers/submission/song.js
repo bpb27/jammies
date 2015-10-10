@@ -3,7 +3,18 @@ import Ember from 'ember';
 export default Ember.Controller.extend({
 	
 	defaultImage: 'assets/images/vinylcover.jpg',
-	formFields: ['album', 'artist', 'review', 'image', 'title', 'selectedType', 'year', 'spotify', 'youtube', 'soundcloud'],
+	error: null,
+	formFields: [
+		'album', 
+		'artist',
+		'review', 
+		'soundcloud',
+		'spotify', 
+		'title', 
+		'year', 
+		'youtube', 
+	],
+	hasVideo: false,
 	image: 'assets/images/vinylcover.jpg',
 	userProfiles: Ember.inject.service(),
 
@@ -15,24 +26,27 @@ export default Ember.Controller.extend({
 		this.get('formFields').forEach(function(field){
 			this.set(field, '');
 		}.bind(this));
+		
 		this.set('image', this.get('defaultImage'));
+		this.set('hasVideo', false);
+		this.set('albumLink', null);
 	},
 
-	determineSpotifyLink: function () {
-		var spotId = '';
-		var spotLink = this.get('spotify');
+	determineSpotifyLink: function (spotLink) {
+		if (spotLink.indexOf('http') !== -1)
+			return spotLink.split('/')[4];
+		if (spotLink.indexOf(':') !== -1)
+			return spotLink.split(':')[2];
 
-		if (spotLink.indexOf('http') !== -1) {
-			spotId = spotLink.split('/')[4];
-		} else if (spotLink.indexOf(':') !== -1) {
-			spotId = spotLink.split(':')[2];
-		} else {
-			spotId = spotLink;
-		}
-
-		this.set('spotifyLink', spotId);
-		return spotId;
+		return spotLink;
 	},
+
+	errorErase: function () {
+		if (this.get('error'))
+			Ember.run.later(function(){
+				this.set('error', null);
+			}.bind(this), 5000);
+	}.observes('error'),
 
 	gatherFormData: function () {
 
@@ -51,34 +65,37 @@ export default Ember.Controller.extend({
 			
 			//Links
 			albumLink: this.get('albumLink'),
-			spotifyLink: this.get('spotify'),
+			spotifyLink: this.get('spotify'), //should this be sanitized?
 			soundCloudLink: this.get('soundcloud'),
 			youTubeLink: this.get('youtube'),
 
 			//User data
 			submittedBy: this.get('session.currentUser.displayName'),
 			submittedByID: this.get('userProfiles.user.id')
-			//submittedByEmail: this.get('session.userProfile.email'),
-			//submittedByID: this.get('session.userProfile.id')
 		
 		};
 	},
 
 	saveRecord: function (data) {
-		console.log(data);
+		console.log("Success!", data);
 		this.clearForm();
 
-		// var song = this.store.createRecord('music', data);
-		// song.save().then(function(){
-		// 	this.clearForm();
-		// 	this.transitionToRoute('songs');
-		// }.bind(this));
+		var song = this.store.createRecord('music', data);
+		song.save().then(function(){
+			this.clearForm();
+			this.transitionToRoute('music');
+		}.bind(this), function (error) {
+			this.set('error', 'Failed to save song.');
+			console.log("Error: ", error);
+		}.bind(this));
 	},
 
 	spotifyAPI: function () {
 
-		if (this.get('spotify').length < 25) return;
-		var spotId = this.determineSpotifyLink();
+		if (this.get('spotify').length < 25) 
+			return;
+		
+		var spotId = this.determineSpotifyLink(this.get('spotify'));
 
 		Ember.$.ajax('https://api.spotify.com/v1/tracks/' + spotId).then(function(data){
 			
@@ -105,19 +122,26 @@ export default Ember.Controller.extend({
 			Ember.$('textarea').focus();
 
 		}.bind(this), function(error){
-			console.log(error);
-		});
+			this.set('error', 'Failed to load data from Spotify.');
+			console.log("Error", error);
+		}.bind(this));
 			
 	}.observes('spotify'),
 
 	validate: function (record) {
+		var error = null;
+
 		if (!record.spotifyLink && !record.youTubeLink && !record.soundCloudLink) 
-			return alert('A link, madam.');
-		if (!record.title || !record.artist) 
-			return alert('Title and artist, madam.');
-		if (!record.review) 
-			return alert('Your review sir, if even just a word.');
-		return true;
+			error = 'Provide a song link, madam.';
+		else if (!record.title || !record.artist) 
+			error = 'Title and artist, madam.';
+		else if (!record.review) 
+			error = 'A review, madam.';
+
+		if (error)
+			this.set('error', error);
+		else
+			return true;
 	},
 
 	actions: {

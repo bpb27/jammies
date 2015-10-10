@@ -8,7 +8,7 @@
                <li {{action 'closePlayer'}}><a>Close Player</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-               <img class="profile-picture" src={{{session.currentUser.profileImageURL}}}>
+               <li><img class="profile-picture" src={{{session.currentUser.profileImageURL}}}></li>
                <li>{{#link-to 'users'}}{{session.currentUser.displayName}}{{/link-to}}</li>
                <li {{action 'signOut'}}><a>Logout</a></li>
             </ul>
