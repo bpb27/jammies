@@ -1,14 +1,23 @@
 <div class="music-content">
-	<div class="title pointer" {{action 'playSong'}}>{{song.title}} {{fa-icon "play-circle"}}</div>
-	<div class="artist pointer" {{action 'searchTag' song.artist}}>by {{song.artist}}</div>
+	<div class="title">
+		<span class="pointer" {{action 'playSong'}}>{{song.title}} {{fa-icon "play-circle"}}</span>
+	</div>
+	<div class="artist">
+		<span class="pointer" {{action 'searchTag' song.artist}}>by {{song.artist}}</span>
+	</div>
 	<img class="music-image-small full-width" src="{{imageToDisplay}}">
-	<div class="album full-width {{if song.albumLink 'pointer'}}" {{action 'playAlbum'}}>
-		{{song.album}} ({{song.year}}) 
-		{{#if song.albumLink}}{{fa-icon "play-circle"}}{{/if}}
+	<div class="album">
+		{{#if song.albumLink}}
+	 		<span class="pointer" {{action 'playAlbum'}}>{{song.album}} ({{song.year}}) {{fa-icon "play-circle"}}</span>
+	 	{{else}}
+			{{song.album}} ({{song.year}})
+		{{/if}}
 	</div>
-	<div class="album full-width pointer {{if song.hasVideo 'btn-play-video' 'hide'}}" {{action 'playVideo'}}>
-		Video {{fa-icon 'fa fa-youtube-play'}}
-	</div>
+	{{#if song.hasVideo}}
+		<div class="video pointer" {{action 'playVideo'}}>
+			Video {{fa-icon 'fa fa-youtube-play'}}
+		</div>
+	{{/if}}
 	<div class="comment-and-tag-container">
 		<div class="review">
 			<span class="name bold">{{song.submittedBy}}</span>
@@ -16,6 +25,15 @@
 			<br>
 			<div> - {{format-date song.createdAt}} </div>
 		</div>
+		{{#if song.comments}}<hr>{{/if}}
+		{{#each song.comments as |comment|}}
+			<div class="comment">
+				<span class="name bold">{{comment.postedBy}}</span>
+				<span class="comment-body">{{comment.comment}}</span>
+				<div> - {{format-date comment.createdAt}}</div>
+			</div>
+		{{/each}}
+		<hr>
 		<div class="tag-list">
 			{{#each song.tags as |tag|}}
 				<button class="btn-tag" {{action 'searchTag' tag.name}}>{{tag.name}}</button>
