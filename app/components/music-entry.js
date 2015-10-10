@@ -45,29 +45,12 @@ export default Ember.Component.extend({
 			this.sendAction('favorite', this.get('song.id'), type);
 		},
 
-		loadPlayer: function (type) {			
+		play: function (type) {			
 			this.sendAction('loadPlayer', this.get('song'), type);
 		},
 
-		playAlbum: function () {
-			if (this.get('song.albumLink')) {
-				this.set('isShowingAlbum', !this.get('isShowingAlbum'));
-
-				if (this.get('isShowingAlbum'))
-					this.send('loadPlayer', 'album');
-			} 
-		},
-
-		playSong: function () {
-			this.send('loadPlayer', 'song');
-		},
-
-		playVideo: function () {
-			this.sendAction('playVideo', this.get('song.parsedYouTubeLink'));
-		},
-
-		searchTag: function (name) {
-			this.sendAction('searchTag', name);
+		searchText: function (name) {
+			this.sendAction('searchText', name);
 		},
 
 		submitComment: function (param) {

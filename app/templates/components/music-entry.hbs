@@ -1,20 +1,20 @@
 <div class="music-content">
 	<div class="title">
-		<span class="pointer" {{action 'playSong'}}>{{song.title}} {{fa-icon "play-circle"}}</span>
+		<span class="pointer" {{action 'play' 'song'}}>{{song.title}} {{fa-icon "play-circle"}}</span>
 	</div>
 	<div class="artist">
-		<span class="pointer" {{action 'searchTag' song.artist}}>by {{song.artist}}</span>
+		<span class="pointer" {{action 'searchText' song.artist}}>by {{song.artist}}</span>
 	</div>
 	<img class="music-image-small full-width" src="{{imageToDisplay}}">
 	<div class="album">
 		{{#if song.albumLink}}
-	 		<span class="pointer" {{action 'playAlbum'}}>{{song.album}} ({{song.year}}) {{fa-icon "play-circle"}}</span>
+	 		<span class="pointer" {{action 'play' 'album'}}>{{song.album}} ({{song.year}}) {{fa-icon "play-circle"}}</span>
 	 	{{else}}
 			{{song.album}} ({{song.year}})
 		{{/if}}
 	</div>
 	{{#if song.hasVideo}}
-		<div class="video pointer" {{action 'playVideo'}}>
+		<div class="video pointer" {{action 'play' 'video'}}>
 			Video {{fa-icon 'fa fa-youtube-play'}}
 		</div>
 	{{/if}}
@@ -33,12 +33,20 @@
 				<div> - {{format-date comment.createdAt}}</div>
 			</div>
 		{{/each}}
+{{!-- 		{{#if isShowingCommentForm}}
+			{{comment-button submitComment='submitComment' discardComment='discardComment'}}
+		{{else}}
+			<button class="btn btn-xs btn-comment" {{action 'showCommentForm'}}>Comment {{fa-icon "plus-circle"}}</button>
+		{{/if}} --}}
 		<hr>
 		<div class="tag-list">
 			{{#each song.tags as |tag|}}
-				<button class="btn-tag" {{action 'searchTag' tag.name}}>{{tag.name}}</button>
+				<button class="btn-tag" {{action 'searchText' tag.name}}>{{tag.name}}</button>
 			{{/each}}
 			<button class="btn-tag" {{action 'showTagForm'}}>Tag {{fa-icon "plus-circle"}}</button>
+			{{!-- <div class="{{if isShowingTagForm 'submit-tag-wrapper' 'hide'}}">
+				{{tag-button submitTag='submitTag'}}
+			</div> --}}
 		</div>
 	</div>
 </div>

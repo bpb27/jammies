@@ -10,7 +10,7 @@ module.exports = function(environment) {
       'font-src': "'self' data: fonts.gstatic.com https://maxcdn.bootstrapcdn.com/",
       'img-src': "'self' https://i.scdn.co/image/ https://lh3.googleusercontent.com",
       'style-src': "'self' 'unsafe-inline' fonts.googleapis.com https://maxcdn.bootstrapcdn.com",
-      'frame-src': "'self' https://*.firebaseio.com https://embed.spotify.com https://www.youtube.com/embed/",
+      'frame-src': "'self' https://*.firebaseio.com https://embed.spotify.com https://www.youtube.com/embed/ https://w.soundcloud.com/",
       'script-src': "'self' 'unsafe-eval' https://*.firebaseio.com https://maxcdn.bootstrapcdn.com"
     },
     firebase: 'https://thejams.firebaseio.com/',

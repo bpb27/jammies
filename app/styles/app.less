@@ -22,6 +22,28 @@
     }
 }
 
+.audio-player {
+    
+    &.is-playing {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        
+        &.spotify {
+            height: 80px;
+        }
+
+        &.youtube {
+            bottom: -5px;
+        }
+
+        &.soundcloud {
+            bottom: -5px;
+        }
+
+    }
+}
+
 
 .page-content {
 	.page-body {
@@ -169,6 +191,7 @@
 
 #page-songs {
     margin-top: 50px;
+    padding-bottom: 100px;
 
     .music-content {
     
