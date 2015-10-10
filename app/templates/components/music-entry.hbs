@@ -1,0 +1,14 @@
+<div class="music-content">
+	<img class="music-image-small full-width" src="{{imageToDisplay}}">
+	<div class="topline">
+		<div class="title pointer" {{action 'playSong'}}>{{song.title}} {{fa-icon "play-circle"}}</div><br>
+		<div class="artist pointer" {{action 'searchTag' song.artist}}>by {{song.artist}}</div>
+	</div>
+	<div class="album full-width {{if song.albumLink 'pointer'}}" {{action 'playAlbum'}}>
+		{{song.album}} ({{song.year}}) 
+		{{#if song.albumLink}}{{fa-icon "play-circle"}}{{/if}}
+	</div>
+	<div class="album full-width pointer {{if song.hasVideo 'btn-play-video' 'hide'}}" {{action 'playVideo'}}>
+		Video {{fa-icon 'fa fa-youtube-play'}}
+	</div>
+</div>

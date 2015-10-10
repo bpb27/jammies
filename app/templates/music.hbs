@@ -47,19 +47,24 @@
 	</div>
 
 	<div class="page-body">
-		<ul>
-			{{#each filteredContent as |song index|}}
-		    	<h4>{{index}}) {{song.title}} by {{song.artist}}</h4>
-		    	{{#each song.comments as |comment|}}
-		    		<p><b>{{comment.postedBy}}</b> {{comment.comment}}</p>
-			    {{/each}}
-		    	<ul>
-			    	{{#each song.tags as |tag|}}
-			    		<li>{{tag.name}} {{tag.tally.content}}</li>
-			    	{{/each}}
-			    </ul>
-		  	{{/each}}
-		</ul>
+		<div class="container">
+			<div class="row">
+				{{#each filteredContent as |song|}}
+					<div class="col-md-4">
+						{{music-entry
+							song=song
+							favorite='favorite'
+							submitComment='submitComment'
+							submitTag='submitTag'
+			            	deleteComment='deleteComment'
+			            	searchTag='searchTag'
+			            	loadPlayer='loadPlayer'
+			            	playVideo='playVideo'
+						}}
+					</div>
+				{{/each}}
+			</div>
+		</div>
 	</div>
 
 </div>

@@ -6,6 +6,20 @@
     }
 }
 
+.row {
+    -moz-column-width: 25em;
+    -webkit-column-width: 25em;
+    -moz-column-gap: 1em;
+    -webkit-column-gap:1em; 
+}
+
+.row > .col-md-4 {
+    display: inline-block;
+    padding:  .33rem;
+    width:  100%; 
+    float:none;
+}
+
 .navbar {   
     font-family: 'Raleway', sans-serif;
     font-size: 13px;
@@ -169,6 +183,67 @@
 
 #page-songs {
     margin-top: 50px;
+
+    .music-content {
+    
+        position: relative;
+        margin-bottom: 50px;
+
+        &:hover {
+            .btn-edit-entry {
+                display: inline-block;
+            }
+        }
+
+        image {
+            min-height: 100px;
+        }
+
+        .title, .album, .artist {
+            background-color: rgba(90, 90, 90, 1);
+            font-size: 1.2em;
+            font-weight: 100;
+            color: white;
+            padding: 5px 10px;
+            display: inline-block;
+        }
+
+        .btn-play-video {
+            background-color: #EA6060;
+            font-size: 1.1em;
+        }
+
+        .btn-edit-entry {
+            display: none;
+        }
+
+        .topline {
+            position: absolute;
+            top: 0;
+        }
+
+        .comment-and-tag-container {
+            margin-bottom: 0;
+            background-color: rgb(205, 205, 205);
+            border: 0;
+            border-radius: 0;
+            padding: 15px;
+            font-size: 0.9em;
+
+            .tag-list {
+                margin-top: 10px;
+                
+                .btn-tag {
+                    margin-bottom: 3px;
+                }
+            }
+
+            .comment-edit {
+                margin-left: 7px;
+            }
+
+        }   
+    }
 }
 
 .song-form {
@@ -220,6 +295,62 @@
     .btn-success {
         margin-top: 15px;
     }
+}
+
+
+//General Atomic Classes
+
+//General Classes
+.center {
+    text-align: center;
+}
+
+.hide {
+    display: none;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.name {
+    margin-right: 6px;
+}
+
+.app-blue {
+    background-color: #009ABE;
+}
+
+.app-green {
+    background-color: #35B364;
+}
+
+.app-yellow {
+    background-color: #F4BD00;
+}
+
+.app-red {
+    background-color: #EA6060;
+}
+
+.fa {
+    margin-left: 5px;
+}
+
+*:focus {
+    outline: none;
+}
+
+.btn:focus{
+    outline-width: 0;
 }
 
 
