@@ -33,20 +33,15 @@
 				<div> - {{format-date comment.createdAt}}</div>
 			</div>
 		{{/each}}
-{{!-- 		{{#if isShowingCommentForm}}
-			{{comment-button submitComment='submitComment' discardComment='discardComment'}}
-		{{else}}
-			<button class="btn btn-xs btn-comment" {{action 'showCommentForm'}}>Comment {{fa-icon "plus-circle"}}</button>
-		{{/if}} --}}
 		<hr>
 		<div class="tag-list">
-			{{#each song.tags as |tag|}}
+			{{#each uniqueTags as |tag|}}
 				<button class="btn-tag" {{action 'searchText' tag.name}}>{{tag.name}}</button>
 			{{/each}}
 			<button class="btn-tag" {{action 'showTagForm'}}>Tag {{fa-icon "plus-circle"}}</button>
-			{{!-- <div class="{{if isShowingTagForm 'submit-tag-wrapper' 'hide'}}">
+			<div class="{{if isShowingTagForm 'submit-tag-wrapper' 'hide'}}">
 				{{tag-button submitTag='submitTag'}}
-			</div> --}}
+			</div>
 		</div>
 	</div>
 </div>

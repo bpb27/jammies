@@ -23,6 +23,17 @@ export default Ember.Component.extend({
 		return false;
 	}.property(),
 
+	uniqueTags: function () {
+		return this.get('song.tags')
+			.map(function(tag){
+				return tag.get('name');
+			})
+			.uniq()
+			.map(function(tagName){
+				return Ember.Object.create({name: tagName});
+			});
+	}.property('song.tags.length'),
+
 	actions: {
 
 		deleteComment: function (commentId) {
@@ -58,8 +69,8 @@ export default Ember.Component.extend({
 			this.send('discardComment');
 		},
 
-		submitTag: function (param) {
-			this.sendAction('submitTag', param, this.get('song.id'));
+		submitTag: function (tag) {
+			this.sendAction('submitTag', tag, this.get('song.id'));
 		},
 
 		showCommentForm: function () {

@@ -1,14 +1,15 @@
 import Ember from 'ember';
 
+//model.songs & model.tags
+
 export default Ember.Controller.extend({
 	currentUser: Ember.computed.alias('session.currentUser'),
 	error: '',
-   modelTrigger: false,
 	query: '',
 	playAllLinks: '',
 	showOnlyFavorites: false,
 	showOnlyVideos: false,
-	songLimit: 39,
+	songLimit: 15,
 	sortAscending: true,
 	sortProperties: ['createdAt'],
    userProfiles: Ember.inject.service(),
@@ -18,7 +19,7 @@ export default Ember.Controller.extend({
    }.on('init'),
 
 	filteredContent: function () {
-    	var music = this.get('model');
+    	var music = this.get('model.songs');
     	var query = Ember.String.htmlSafe(this.get('query')).string;
     	var rx = new RegExp(query, 'gi');
       var songs = music.filter(function(song) {
@@ -27,11 +28,11 @@ export default Ember.Controller.extend({
       }.bind(this));
 
       songs = this.sortAndLimitModel(songs);
-      songs = this.setMusicColumns(songs);
+      songs = this.setMusicColumns(songs); //deal with small browser width
 
       return songs;
 
-  	}.property('model.isUpdating', 'query', 'sortProperties.[]', 'sortAscending', 'showOnlyFavorites', 'showOnlyVideos'),
+  	}.property('model.songs.isUpdating', 'query', 'sortProperties.[]', 'sortAscending', 'showOnlyFavorites', 'showOnlyVideos'),
 
   	determineEmbedFrame: function (playPayload) {
       var frame = '';
@@ -52,18 +53,32 @@ export default Ember.Controller.extend({
       return playPayload;
    },
 
+   getSongTags: function (song) {
+      if (!song.get('tags'))
+         return '';
+         
+      var tags = [];
+      
+      song.get('tags').forEach(function(tag){
+         tags.push(tag.get('name'));
+      });
+
+      return tags.join();
+   },
+
    queryMatch: function (song, rx) {
   		if (this.validModel(song)) {
-  			return (song.get('title').match(rx) 
+         return (song.get('title').match(rx) 
 	      		|| song.get('artist').match(rx) 
 	      		|| song.get('album').match(rx) 
 	      		|| song.get('submittedBy').match(rx) 
-	      		|| song.get('year').toString().match(rx));
+	      		|| song.get('year').toString().match(rx)
+               || this.getSongTags(song).match(rx)); //make tag searches exact
   		}    	
   	},
 
    scrollUp: function () {
-      Ember.$("html, body").animate({ scrollTop: 0 }, "slow");
+      Ember.$("html, body").animate({ scrollTop: 0 }, "fast");
    },
 
    setMusicColumns: function (music) {
@@ -159,7 +174,25 @@ export default Ember.Controller.extend({
   				this.set('sortAscending', !this.get('sortAscending'));
   			else
   				this.set('sortProperties', [property]);
-  		}
+  		},
+
+      submitTag: function (text, entryId) {
+         if (!text) 
+            return; //also ensure auth
+
+         var tag = this.get('model.tags').findBy('name', text.toLowerCase());
+         
+         if (!tag)
+            tag = this.store.createRecord('tag', {name: text.toLowerCase()});
+
+         this.store.find('music', entryId).then(function(song){
+            song.get('tags').pushObject(tag);
+            song.save().then(function(){
+               tag.save()
+            });
+         }.bind(this));
+
+      },
   	}
 
 });
