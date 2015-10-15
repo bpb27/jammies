@@ -9,7 +9,7 @@ export default Ember.Controller.extend({
 	playAllLinks: '',
 	showOnlyFavorites: false,
 	showOnlyVideos: false,
-	songLimit: 15,
+	songLimit: 27,
 	sortAscending: true,
 	sortProperties: ['createdAt'],
    userProfiles: Ember.inject.service(),
@@ -17,6 +17,17 @@ export default Ember.Controller.extend({
    _setup: function () {
       this.get('userProfiles.user'); //necessary to trigger fetchUser, which returns a promise
    }.on('init'),
+
+   tagCollection: function () {
+      var tags = this.get('model.tags');
+      var collection = [];
+      
+      tags.forEach(function(tag){
+         collection.push(tag.get('name'));
+      });
+
+      return collection;
+   }.property('model.tags.isUpdating', 'model.tags.length'),
 
 	filteredContent: function () {
     	var music = this.get('model.songs');
@@ -188,7 +199,7 @@ export default Ember.Controller.extend({
          this.store.find('music', entryId).then(function(song){
             song.get('tags').pushObject(tag);
             song.save().then(function(){
-               tag.save()
+               tag.save();
             });
          }.bind(this));
 

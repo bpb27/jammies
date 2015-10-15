@@ -1,7 +1,11 @@
 TODO:
 
-- Push user favorites?
+- Comment component
+- Play all button
+- User preferences
+- New notification system
 - New user creation
+- User favorites
 - Abstract spotify parses and ajax calls to service or model
 - Properly initialize userProfiles, still needs that bullshit first get
 - Auth control of all routes
@@ -15,26 +19,3 @@ Using github:
 2) Git add -A
 3) Git commit -m 'commit message'
 4) git push -u origin master
-
-Different model hooks:
-
-model () {
-	return this.store.findAll('music').then(function(music){
-		return music;
-	});
-},
-afterModel (model, transition) {
-	return Ember.RSVP.all(model.getEach('comments').then(function(){
-		return model;
-	}));
-}
-
-model () {
-	return Ember.RSVP.hash({
-		songs: this.store.findAll('music'),
-		comments: this.store.findAll('comment')
-    }).then(function(results){
-    	console.log(results);
-    	return results.songs;
-    });
-}

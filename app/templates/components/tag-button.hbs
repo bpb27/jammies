@@ -1,2 +1,5 @@
 {{input value=tagText placeholder="Tag..." class="form-control"}}
 <button class="btn btn-success" {{action 'submitTag'}}>✓</button>
+<span {{action 'substitute'}}>
+	{{input value=suggestion placeholder="Suggestion..." class="form-control pointer" readonly=true}}
+</span>

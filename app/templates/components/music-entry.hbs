@@ -40,7 +40,7 @@
 			{{/each}}
 			<button class="btn-tag" {{action 'showTagForm'}}>Tag {{fa-icon "plus-circle"}}</button>
 			<div class="{{if isShowingTagForm 'submit-tag-wrapper' 'hide'}}">
-				{{tag-button submitTag='submitTag'}}
+				{{tag-button tagCollection=tagCollection submitTag='submitTag'}}
 			</div>
 		</div>
 	</div>
