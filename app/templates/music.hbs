@@ -48,6 +48,10 @@
 
 	<div class="page-body">
 		<div class="container">
+			<div class="col-lg-12 video-player-container center">
+				<div class="video-player"></div>
+				<div class="btn-close-video" {{action 'closeVideo'}}>{{fa-icon "times"}}</div>
+			</div>
 			{{#each filteredContent as |column|}}
 				<div class="col-md-4">
 					{{#each column as |song|}}

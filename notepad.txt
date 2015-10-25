@@ -5,6 +5,9 @@ TODO:
 - User preferences
 - New notification system
 - New user creation
+- Edit songs
+- Edit comments
+- Edit tags?
 - User favorites
 - Abstract spotify parses and ajax calls to service or model
 - Properly initialize userProfiles, still needs that bullshit first get

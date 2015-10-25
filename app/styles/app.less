@@ -206,59 +206,101 @@
     margin-top: 50px;
     padding-bottom: 100px;
 
-    .music-content {
-    
-        position: relative;
-        margin-bottom: 50px;
+    .video-player-container {
+        
+        .btn-close-video {
+            display: none;
+        }
 
-        &:hover {
-            .btn-edit-entry {
+        &.playing {
+            margin-bottom: 30px;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+
+            .btn-close-video {
                 display: inline-block;
+                position: absolute;
+                top: 0;
+                right: 0;
+                width: 20px;
+                height: 20px;
+                background-color: #EA6060;
+                color: white;
+                cursor: pointer;
+
+                .fa {
+                    margin-left: 0;
+                }
             }
         }
+    }
+
+    .music-content {
+        margin-bottom: 30px;
+        border: 3px solid black;
 
         image {
             min-height: 100px;
         }
 
         .title, .album, .artist, .video {
-            background-color: rgba(90, 90, 90, 1);
-            font-size: 1.2em;
+            // background-color: rgba(90, 90, 90, 1);
+            background-color: #009ABE;
+            font-size: 1.3em;
             font-weight: 100;
             color: white;
-            padding: 5px 10px;
+            padding: 7px 10px;
+            text-align: center;
+        }
+
+        .artist {
+            border-bottom: 3px solid black;
+        }
+
+        .album {
+            border-top: 3px solid black;
         }
 
         .video {
             background-color: #EA6060;
         }
 
-        .btn-edit-entry {
-            display: none;
+        .review {
+            font-size: 15px;
         }
 
-        .comment-and-tag-container {
-            margin-bottom: 0;
+        .comments-btn {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .text-container {
             background-color: rgb(205, 205, 205);
-            border: 0;
-            border-radius: 0;
+            border-top: 3px solid black;
             padding: 15px;
             font-size: 0.9em;
 
-            .comment {
-                margin-bottom: 10px;
+            .comment-list {
+                margin-top: 20px;
+
+                .comment {
+                    margin-bottom: 10px;
+                    padding: 10px;
+                    background-color: #C0C0C0;
+                }
+
+                .comment-box {
+                    margin: 20px 0 10px 0;
+                }
+
+                .btn-sm {
+                    width: 30%;
+                }
             }
 
             .tag-list {
                 margin-top: 10px;
-                
-                .btn-tag {
-                    margin-bottom: 3px;
-                }
-            }
 
-            .comment-edit {
-                margin-left: 7px;
             }
 
         }   
@@ -319,7 +361,6 @@
 
 //General Atomic Classes
 
-//General Classes
 .center {
     text-align: center;
 }

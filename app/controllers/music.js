@@ -5,6 +5,7 @@ import Ember from 'ember';
 export default Ember.Controller.extend({
 	currentUser: Ember.computed.alias('session.currentUser'),
 	error: '',
+   numberOfColumns: 3,
 	query: '',
 	playAllLinks: '',
 	showOnlyFavorites: false,
@@ -96,17 +97,33 @@ export default Ember.Controller.extend({
       var one = [];
       var two = [];
       var three = [];
+      var four = [];
 
-      for (var i = 0; i < music.length; i++) {
-         if (one.length === two.length && one.length === three.length) 
-            one.push(music[i]);
-         else if (one.length > two.length) 
-            two.push(music[i]);
-         else 
-            three.push(music[i]);
+      if (this.get('numberOfColumns') === 3) {
+         for (var i = 0; i < music.length; i++) {
+            if (one.length === three.length) 
+               one.push(music[i]);
+            else if (one.length > two.length) 
+               two.push(music[i]);
+            else 
+               three.push(music[i]);
+         }
+         return [one, two, three];
       }
 
-      return [one, two, three];
+      if (this.get('numberOfColumns') === 4) {
+         for (var i = 0; i < music.length; i++) {
+            if (one.length === four.length) 
+               one.push(music[i]);
+            else if (one.length > two.length)
+               two.push(music[i]);
+            else if (two.length > three.length) 
+               three.push(music[i]);
+            else 
+               four.push(music[i]);
+         }
+         return [one, two, three, four];
+      }
 
    },
 
@@ -140,10 +157,15 @@ export default Ember.Controller.extend({
   	},
 
   	actions: {
+      closeVideo: function () {
+         Ember.$('.video-player-container .video-player').html('');
+         Ember.$('.video-player-container').removeClass('playing');
+      },
+
       loadPlayer: function (song, type) {
 
          if (type === 'video') {
-            console.log('Video play.');
+            this.send('playVideo', song);
          }
          else {
             var playPayload = {
@@ -161,6 +183,14 @@ export default Ember.Controller.extend({
             //increment play
          }
 
+      },
+
+      playVideo: function (song) {
+         var embed = '<iframe width="640" height="390" src="https://www.youtube.com/embed/' + song.get('parsedYouTubeLink') + '" frameborder="0" allowfullscreen></iframe>';
+         Ember.$('.video-player-container .video-player').html('');
+         Ember.$('.video-player-container .video-player').append(embed);
+         Ember.$('.video-player-container').addClass('playing');
+         this.scrollUp();
       },
 
   		searchText: function (text) {
@@ -186,6 +216,28 @@ export default Ember.Controller.extend({
   			else
   				this.set('sortProperties', [property]);
   		},
+
+      submitComment: function (text, entryId) {
+         
+         var newComment = {
+            comment: text,
+            postedBy: this.get('currentUser.displayName'),
+            submittedByID: this.get('userProfiles.user.id'), 
+            createdAt: new Date(),
+         }
+
+         if (!newComment['comment'] || !newComment['postedBy'] || !newComment['submittedByID']) return; //handle error
+
+         var comment = this.store.createRecord('comment', newComment);
+
+         this.store.find('music', entryId).then(function(song){
+            song.get('comments').pushObject(comment);
+            song.save().then(function(){
+               comment.save();
+            });
+         }.bind(this));
+
+      },
 
       submitTag: function (text, entryId) {
          if (!text) 

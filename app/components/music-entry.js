@@ -4,8 +4,14 @@ export default Ember.Component.extend({
 
 	classNames: ['music-entry-component'],
 	isPlayingVideo: false,
-	isShowingCommentForm: false,
 	isShowingAlbum: false,
+	isShowingComments: false,
+	isShowingTagForm: false,
+	newComment: '',
+
+	addTagText: function () {
+		return this.get('uniqueTags.length') ? '' : 'Tag';
+	}.property(),
 
 	imageToDisplay: function () {
 		return this.get('song.image') || 'assets/images/vinylcover_sm.jpg';
@@ -22,6 +28,10 @@ export default Ember.Component.extend({
 	isFavorite: function () {
 		return false;
 	}.property(),
+
+	uniqueComments: function () {
+		return this.get('song.comments').uniq();
+	}.property('song.comments.length'),
 
 	uniqueTags: function () {
 		return this.get('song.tags')
@@ -41,15 +51,8 @@ export default Ember.Component.extend({
 		},
 
 		discardComment: function () {
-			this.set('isShowingCommentForm', false);
-		},
-
-		edit: function () {
-			console.log("Edit");
-		},
-
-		editComment: function () {
-			this.set('isShowingCommentForm', true);
+			this.set('newComment', '');
+			this.set('isShowingComments', false);
 		},
 
 		favorite: function (type) {
@@ -64,17 +67,17 @@ export default Ember.Component.extend({
 			this.sendAction('searchText', name);
 		},
 
-		submitComment: function (param) {
-			this.sendAction('submitComment', param, this.get('song.id'));
+		showComments: function () {
+			this.set('isShowingComments', !this.get('isShowingComments'));
+		},
+
+		submitComment: function () {
+			this.sendAction('submitComment', this.get('newComment'), this.get('song.id'));
 			this.send('discardComment');
 		},
 
 		submitTag: function (tag) {
 			this.sendAction('submitTag', tag, this.get('song.id'));
-		},
-
-		showCommentForm: function () {
-			this.set('isShowingCommentForm', !this.get('isShowingCommentForm'));
 		},
 
 		showTagForm: function () {
