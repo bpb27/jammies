@@ -1,47 +1,61 @@
 import Ember from 'ember';
 
 export default Ember.Route.extend({
-	model() {
+	model: function () {
 		return this.store.findAll('user');
 	},
 
-	findExistingUser: function (name, id) {
-		try {
-			
-			var userIdToUpdate;
-			
-			this.get('context.content').forEach(function(user){
-				if (name.indexOf(user['_data']['firstName']) !== -1) {
-					userIdToUpdate = user['id'];
-				}
-				else if (name.indexOf(user['_data']['lastName']) !== -1 && user['_data']['lastName'] !== 'Brown') {
-					userIdToUpdate = user['id'];
-				}
-			});
+	createNewUser: function (name, id) {
+		var newUser = this.store.createRecord('user', {
+			displayName: name,
+			gId: id,
+			lastVisit: new Date(),
+			favorites: ''
+		});
 
-			if (userIdToUpdate) {
-				this.store.findRecord('user', userIdToUpdate).then(function(model){
-					model.set('gId', id);
-					model.set('displayName', name);
-					model.save().then(function(results){
-						console.log("Success", results);
-					});
-				});
-			} 
-			else {
-				//createUser
-			}
+		newUser.save();
+	},
 
-		} catch (e) {
-			console.log("Unable to find user.", e);
+	locateExistingUser: function (name) {
+		return this.get('context.content').filter(function(user){
+			if (name.indexOf(user['_data']['firstName']) !== -1)
+				return true;
+			if (name.indexOf(user['_data']['lastName']) !== -1 && user['_data']['lastName'] !== 'Brown')
+				return true;
+		});
+	},
+
+	processUser: function (name, id) {
+		var user = this.locateExistingUser(name)[0];
+		var userIsUpdated = this.userIsUpdated(user)
+
+		if (!userIsUpdated) {
+			if (user)
+				this.updateExistingUser(user, name, id);
+			else if (name && id)
+				this.createNewUser(name, id)
+			else 
+				console.log("Error");
 		}
+	},
+
+	updateExistingUser: function (user, name, id) {
+		this.store.findRecord('user', user['id']).then(function(model){
+			model.set('gId', id);
+			model.set('displayName', name);
+			model.save();
+		});
+	},
+
+	userIsUpdated: function (user) {
+		if (user && user['_data'] && user['_data']['gId']) 
+			return true;
 	},
 
 	actions: {
     	signIn: function(provider) {
 			this.get("session").open("firebase", { provider: provider}).then(function(data) {
-				console.log(data.currentUser);
-				this.findExistingUser(data.currentUser.displayName, data.currentUser.id);
+				this.processUser(data.currentUser.displayName, data.currentUser.id);
 			}.bind(this));
     	}
   	}

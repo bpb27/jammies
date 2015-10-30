@@ -72,6 +72,14 @@
     filter: FlipH;
 }
 
+.background-image-bottom {
+    width: 100%;
+    position: absolute;
+    bottom: -350px;
+    opacity: 0.5;
+    z-index: -1;
+}
+
     
 .jumbotron {
     text-align: center;
@@ -239,15 +247,11 @@
         margin-bottom: 30px;
         border: 3px solid black;
 
-        image {
-            min-height: 100px;
-        }
-
         .title, .album, .artist, .video {
             // background-color: rgba(90, 90, 90, 1);
             background-color: #009ABE;
             font-size: 1.3em;
-            font-weight: 100;
+            font-weight: 200;
             color: white;
             padding: 7px 10px;
             text-align: center;
@@ -301,6 +305,10 @@
             .tag-list {
                 margin-top: 10px;
 
+                .btn-sm {
+                    margin-bottom: 4px;
+                }
+
             }
 
         }   
@@ -324,13 +332,6 @@
             font-size: 18px;
             color: #DC0000;
         }
-    }
-    
-    .background-image {
-        position: absolute;
-        width: 100%;
-        z-index: -1;
-        opacity: 0.4;
     }
     
     h6 {
