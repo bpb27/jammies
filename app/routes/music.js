@@ -6,7 +6,6 @@ export default Ember.Route.extend({
 			songs: this.store.findAll('music'),
 			tags: this.store.findAll('tag')
 	    }).then(function(results){
-	    	console.log(results);
 	    	return results;
 	    });
 	}

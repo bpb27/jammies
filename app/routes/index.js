@@ -10,7 +10,8 @@ export default Ember.Route.extend({
 			displayName: name,
 			gId: id,
 			lastVisit: new Date(),
-			favorites: ''
+			favorites: '',
+			sourceDefault: 'spotify'
 		});
 
 		newUser.save();

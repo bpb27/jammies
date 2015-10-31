@@ -21,7 +21,6 @@ export default DS.Model.extend({
 	
 	// User data
 	submittedBy: DS.attr('string'),
-	submittedByEmail: DS.attr('string'),
 	submittedByID: DS.attr('string'),
 	
 	// HasMany data
@@ -69,5 +68,26 @@ export default DS.Model.extend({
 		})
 		.sort()
 		.objectAt(0);
-	}.property('comments.@each')
+	}.property('comments.[]'),
+
+	returnPlayPayload: function (type, source) {
+		var source = this.returnPreferredLink(source)
+		return {
+			link: source.link,
+			albumLink: this.get('albumLink'),
+			linkType: source.type, 
+			title: this.get('title'), 
+			artist: this.get('artist'), 
+			identity: this.get('id'),
+			isAlbum: type === 'album'
+        };
+	},
+
+	returnPreferredLink: function (source) {
+		if (source === 'spotify' && this.get('spotifyLink'))
+			return {link: this.get('spotifyLink'), type: 'spotify'};
+		if (source === 'youtube' && this.get('youTubeLink'))
+			return {link: this.get('parsedYouTubeLink'), type: 'youtube'};
+		return {link: this.get('primaryLink'), type: this.get('linkType')};
+	}
 });

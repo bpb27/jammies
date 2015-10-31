@@ -1,3 +1,14 @@
-<ul>
-    <li>{{model.fullName}}</li>
-</ul>
+<div id="page-user">
+	<div class="jumbotron">
+		<h1>{{model.displayName}}</h1>
+	</div>
+	<div class="preferences center">
+		<p>Choose which music source you would prefer to play by default:</p>
+		<button class="btn" {{action 'changeSourceDefault' 'spotify'}}> 
+			Spotify<span class="selected {{if spotify 'selected' 'hide'}}">{{fa-icon "check"}}</span>
+		</button>
+		<button class="btn" {{action 'changeSourceDefault' 'youtube'}}>
+			YouTube <span class="selected {{if youtube 'selected' 'hide'}}">{{fa-icon "check"}}</span>
+		</button>
+	</div>
+</div>

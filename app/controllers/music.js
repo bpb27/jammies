@@ -13,10 +13,10 @@ export default Ember.Controller.extend({
 	songLimit: 27,
 	sortAscending: true,
 	sortProperties: ['createdAt'],
-   userProfiles: Ember.inject.service(),
 
    _setup: function () {
-      this.get('userProfiles.user'); //necessary to trigger fetchUser, which returns a promise
+      var user = this.get('userInformation').fetchUser();
+      this.set('userProfile', user);
    }.on('init'),
 
    tagCollection: function () {
@@ -40,13 +40,25 @@ export default Ember.Controller.extend({
       }.bind(this));
 
       songs = this.sortAndLimitModel(songs);
+      this.gatherPlayAllLinks(songs);
       songs = this.setMusicColumns(songs); //deal with small browser width
 
       return songs;
 
   	}.property('model.songs.isUpdating', 'query', 'sortProperties.[]', 'sortAscending', 'showOnlyFavorites', 'showOnlyVideos'),
 
-  	determineEmbedFrame: function (playPayload) {
+  	gatherPlayAllLinks: function (music) {
+      var all = 'spotify:trackset:All Jams:';
+      var links = music.map(function(entry){
+         if (entry.get('spotifyLink'))
+            return entry.get('spotifyLink').split(':')[2] + ','
+      }).join('');
+      
+      all = all + links;
+      this.set('playAllLinks', all);
+   },
+
+   determineEmbedFrame: function (playPayload) {
       var frame = '';
 
       if (playPayload.isAlbum)
@@ -130,11 +142,7 @@ export default Ember.Controller.extend({
    showOnlyMatch: function (song) {
       if (this.get('showOnlyVideos') && !song.get('hasVideo')) 
          return;
-      if (this.get('showOnlyFavorites') && this.get('userProfiles.user.favorites').indexOf(song.get('id')) === -1) 
-         return;
-
       return true;
-
    },
 
   	sortAndLimitModel: function (model) {
@@ -164,25 +172,27 @@ export default Ember.Controller.extend({
 
       loadPlayer: function (song, type) {
 
-         if (type === 'video') {
-            this.send('playVideo', song);
-         }
-         else {
-            var playPayload = {
-               link: song.get('primaryLink'),
-               albumLink: song.get('albumLink'),
-               linkType: song.get('linkType'), 
-               title: song.get('title'), 
-               artist: song.get('artist'), 
-               identity: song.get('id'),
-               isAlbum: type === 'album'
-            };
-            
-            playPayload = this.determineEmbedFrame(playPayload);
-            this.container.lookup('controller:application').send('playRequest', playPayload);
-            //increment play
-         }
+         if (type === 'video')
+            return this.send('playVideo', song);
+         
+         var defaultSource = this.get('userInformation').fetchUserProperty('sourceDefault');
+         var playPayload = song.returnPlayPayload(type, defaultSource);
+         
+         playPayload = this.determineEmbedFrame(playPayload);
+         song.set('totalPlays', song.get('totalPlays') + 1);
+         song.save();
+         this.container.lookup('controller:application').send('playRequest', playPayload);
 
+      },
+
+      playAll: function () {
+         var playPayload = this.determineEmbedFrame({
+            albumLink: this.get('playAllLinks'),
+            linkType: 'spotify',
+            isAlbum: true
+         });
+         
+         this.container.lookup('controller:application').send('playRequest', playPayload);
       },
 
       playVideo: function (song) {
@@ -222,7 +232,7 @@ export default Ember.Controller.extend({
          var newComment = {
             comment: text,
             postedBy: this.get('currentUser.displayName'),
-            submittedByID: this.get('userProfiles.user.id'), 
+            submittedByID: this.get('userProfile.id'), 
             createdAt: new Date(),
          }
 

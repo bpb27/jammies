@@ -1,6 +1,15 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
    <div class="container">
+      <div class="navbar-header">
+         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+         </button>
          {{#link-to 'index' class='navbar-brand'}}THE JAMS{{/link-to}}
+      </div>
+      <div class="collapse navbar-collapse">
          {{#if session.isAuthenticated}}
             <ul class="nav navbar-nav">
                <li>{{#link-to 'music'}}Songs{{/link-to}}</li>
@@ -9,10 +18,11 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                <li><img class="profile-picture" src={{{session.currentUser.profileImageURL}}} /></li>
-               <li>{{#link-to 'users'}}{{session.currentUser.displayName}}{{/link-to}}</li>
+               <li {{action 'toUserRoute'}}><a>{{session.currentUser.displayName}}</a></li>
                <li {{action 'signOut'}}><a>Logout</a></li>
             </ul>
          {{/if}}
+      </div>
    </div>
 </nav>
 

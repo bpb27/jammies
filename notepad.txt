@@ -1,10 +1,8 @@
 TODO:
-
-- Comment component
-- Play all button
+- Small browser width issues with navbar, columns, song submission
 - User preferences
+
 - New notification system
-- New user creation
 - Edit songs
 - Edit comments
 - Edit tags?

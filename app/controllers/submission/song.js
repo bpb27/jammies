@@ -16,11 +16,6 @@ export default Ember.Controller.extend({
 	],
 	hasVideo: false,
 	image: 'assets/images/vinylcover.jpg',
-	userProfiles: Ember.inject.service(),
-
-	_setup: function () {
-      	this.get('userProfiles.user'); //necessary to trigger fetchUser, which returns a promise
-   	}.on('init'),
 
 	clearForm: function () {
 		this.get('formFields').forEach(function(field){
@@ -71,15 +66,12 @@ export default Ember.Controller.extend({
 
 			//User data
 			submittedBy: this.get('session.currentUser.displayName'),
-			submittedByID: this.get('userProfiles.user.id')
+			submittedByID: this.get('userInformation').fetchUser()['id']
 		
 		};
 	},
 
 	saveRecord: function (data) {
-		console.log("Success!", data);
-		this.clearForm();
-
 		var song = this.store.createRecord('music', data);
 		song.save().then(function(){
 			this.clearForm();
@@ -137,6 +129,8 @@ export default Ember.Controller.extend({
 			error = 'Title and artist, madam.';
 		else if (!record.review) 
 			error = 'A review, madam.';
+		else if (!record.year)
+			error = 'A year, madam.'
 
 		if (error)
 			this.set('error', error);

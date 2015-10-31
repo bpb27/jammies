@@ -3,6 +3,7 @@ import Ember from 'ember';
 export default Ember.Controller.extend({
   	isPlaying: false,
 	playType: '',
+	userProfiles: Ember.inject.service(),
 
   	actions: {
   		closePlayer: function () {
@@ -18,6 +19,10 @@ export default Ember.Controller.extend({
 				this.set('playType', request.linkType)
 				Ember.$('.audio-player').append(request.embedLink);
 			}.bind(this));
+  		},
+
+  		toUserRoute: function () {
+  			this.transitionTo('user', this.get('userInformation').fetchUser());
   		}
   	}
 });
