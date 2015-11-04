@@ -13,22 +13,55 @@ export default Ember.Controller.extend({
 	songLimit: 27,
 	sortAscending: true,
 	sortProperties: ['createdAt'],
+   artistSort: 'name',
+   tagSort: 'tally',
 
    _setup: function () {
-      var user = this.get('userInformation').fetchUser();
-      this.set('userProfile', user);
+      Ember.run.later(function() {
+         this.set('tagSort', 'name'); // tally is promise that doesn't render the first time...
+      }.bind(this), 4000);
    }.on('init'),
 
-   tagCollection: function () {
-      var tags = this.get('model.tags');
-      var collection = [];
+   aristList: function () {
+      var hash = {};
       
-      tags.forEach(function(tag){
-         collection.push(tag.get('name'));
+      this.get('model.songs').forEach(function(song){
+         var artist = song.get('artist');
+         if (hash[artist])
+            hash[artist] = hash[artist] + 1;
+         else
+            hash[artist] = 1;
       });
+      
+      var list = Object.keys(hash).map(function(name){
+         return {
+            name: name,
+            tally: hash[name]
+         }
+      })
+      .sortBy(this.get('artistSort'));
 
-      return collection;
-   }.property('model.tags.isUpdating', 'model.tags.length'),
+      if (this.get('artistSort') === 'tally')
+         return list.reverse();
+      return list;
+
+   }.property('model.songs.isUpdating', 'model.songs.length', 'artistSort'),
+
+   tagList: function () {
+      var list = this.get('model.tags').map(function(tag){
+         return {
+            name: tag.get('name'),
+            tally: tag.get('tally.content')
+         }
+      })
+      .uniq()
+      .sortBy(this.get('tagSort'));
+
+      if (this.get('tagSort') === 'tally')
+         return list.reverse();
+      return list;
+   
+   }.property('model.tags.isUpdating', 'model.tags.length', 'tagSort'),
 
 	filteredContent: function () {
     	var music = this.get('model.songs');
@@ -80,14 +113,10 @@ export default Ember.Controller.extend({
    getSongTags: function (song) {
       if (!song.get('tags'))
          return '';
-         
-      var tags = [];
       
-      song.get('tags').forEach(function(tag){
-         tags.push(tag.get('name'));
-      });
-
-      return tags.join();
+      return song.get('tags').map(function(tag){
+         return tag.get('name')
+      }).join();
    },
 
    queryMatch: function (song, rx) {
@@ -227,12 +256,16 @@ export default Ember.Controller.extend({
   				this.set('sortProperties', [property]);
   		},
 
+      sortSidebar: function (field, sort) {
+         this.set(field + 'Sort', sort);
+      },
+
       submitComment: function (text, entryId) {
          
          var newComment = {
             comment: text,
             postedBy: this.get('currentUser.displayName'),
-            submittedByID: this.get('userProfile.id'), 
+            submittedByID: this.get('userInformation').fetchUserProperty('id'), 
             createdAt: new Date(),
          }
 

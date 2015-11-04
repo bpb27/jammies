@@ -42,6 +42,17 @@
 					<li {{action 'sortBy' 'year'}}>Year</li>
 				</ul>
 			</div>
+			<div class="dropdown">
+				<a id="dLabel" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">
+					<button class="btn sorting-btn">Sidebars<span class="caret"></span></button>
+				</a>
+				<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+					<li {{action 'sortSidebar' 'artist' 'name'}}>Artist by Name</li>
+					<li {{action 'sortSidebar' 'artist' 'tally'}}>Artist by Popularity</li>
+					<li {{action 'sortSidebar' 'tag' 'name'}}>Tag by Name</li>
+					<li {{action 'sortSidebar' 'tag' 'tally'}}>Tag by Popularity</li>
+				</ul>
+			</div>
 		</div>
 	</div>
 
@@ -51,12 +62,34 @@
 				<div class="video-player"></div>
 				<div class="btn-close-video" {{action 'closeVideo'}}>{{fa-icon "times"}}</div>
 			</div>
+
+			<div class="tags-sidebar tags-sidebar-left">
+				<div class="tags-btn-container">
+					{{#each tagList as |item|}}
+						<button class="btn btn-primary btn-sm" {{action 'searchText' item.name}}>
+							<span class="badge">{{item.tally}}</span>
+							<span class="tags-sidebar-label">{{item.name}}</span>
+						</button>
+					{{/each}}
+				</div>
+			</div>
+			<div class="tags-sidebar tags-sidebar-right">
+				<div class="tags-btn-container">
+					{{#each aristList as |item|}}
+						<button class="btn btn-primary btn-sm" {{action 'searchText' item.name}}>
+							<span class="badge">{{item.tally}}</span>
+							<span class="tags-sidebar-label">{{item.name}}</span>
+						</button>
+					{{/each}}
+				</div>
+			</div>
+
 			{{#each filteredContent as |column|}}
 				<div class="col-md-4">
 					{{#each column as |song|}}
 						{{music-entry
 							song=song
-							tagCollection=tagCollection
+							tagList=tagList
 							favorite='favorite'
 							submitComment='submitComment'
 							submitTag='submitTag'

@@ -29,19 +29,18 @@ export default Ember.Component.extend({
 		return false;
 	}.property(),
 
+	tagCollection: function () {
+		return this.get('tagList').map(function(tag){
+			return tag.name;
+		});
+	}.property('tagList.length'),
+
 	uniqueComments: function () {
 		return this.get('song.comments').uniq();
 	}.property('song.comments.length'),
 
 	uniqueTags: function () {
-		return this.get('song.tags')
-			.map(function(tag){
-				return tag.get('name');
-			})
-			.uniq()
-			.map(function(tagName){
-				return Ember.Object.create({name: tagName});
-			});
+		return this.get('song.tags').uniq();
 	}.property('song.tags.length'),
 
 	actions: {

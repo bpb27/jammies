@@ -1,6 +1,5 @@
 TODO:
 - Small browser width issues with navbar, columns, song submission
-- User preferences
 
 - New notification system
 - Edit songs
