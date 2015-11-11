@@ -13,7 +13,6 @@
          {{#if session.isAuthenticated}}
             <ul class="nav navbar-nav">
                <li>{{#link-to 'music'}}Songs{{/link-to}}</li>
-               <li>{{#link-to 'users'}}Users{{/link-to}}</li>
                <li {{action 'closePlayer'}}><a>Close Player</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
