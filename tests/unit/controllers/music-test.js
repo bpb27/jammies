@@ -11,6 +11,12 @@ test('Filtered content updates on query', function(assert) {
 		model: createModels(1, mockModel)
 	});
 
+	controller.set('userInformation', {
+		fetchUser: function () {
+			return {id: '1'};
+		}
+	});
+
 	assert.equal(controller.get('query'), 'One');
 	assert.equal(controller.get('model').length, 1);
 	assert.equal(controller.get('filteredContent').length, 1);

@@ -16,7 +16,7 @@ export default Ember.Controller.extend({
 			
 			Ember.run.next(function(){
 				this.set('isPlaying', true);
-				this.set('playType', request.linkType)
+				this.set('playType', request.linkType);
 				Ember.$('.audio-player').append(request.embedLink);
 			}.bind(this));
   		},

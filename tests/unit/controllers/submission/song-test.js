@@ -17,10 +17,23 @@ test('Spotify link parsed correctly', function (assert) {
 	
 	var link = 'https://open.spotify.com/track/5OzHuTzS6K5mn8oQg7owRf';
 	var uri = 'spotify:track:5OzHuTzS6K5mn8oQg7owRf';
+	var embed = '<iframe src="https://embed.spotify.com/?uri=spotify%3Atrack%5OzHuTzS6K5mn8oQg7owRf" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>'
 	var id = '5OzHuTzS6K5mn8oQg7owRf';
 
 	assert.equal(controller.determineSpotifyLink(link), id);
 	assert.equal(controller.determineSpotifyLink(uri), id);
+	assert.equal(controller.determineSpotifyLink(embed), id);
+
+});
+
+test('Youtube link parsed correctly', function (assert) {
+	var controller = this.subject();
+	
+	var link = 'https://www.youtube.com/watch?v=bw3S1dlsGzU';
+	var id = 'bw3S1dlsGzU';
+
+	assert.equal(controller.determineYoutubeLink(link), id);
+	assert.equal(controller.determineYoutubeLink(id), id);
 
 });
 
@@ -31,6 +44,11 @@ test('Gathers all form data and adds necessary properties', function (assert) {
 	Ember.run(function(){
 		setSession(controller);
 		controller.setProperties(modelOne);
+		controller.set('userInformation', {
+			fetchUser: function () {
+				return {id: '1'};
+			}
+		});
 		model = controller.gatherFormData();
 	});
 		
@@ -63,6 +81,11 @@ test('Clears all form fields in event of save or discard', function (assert) {
 	Ember.run(function(){
 		setSession(controller);
 		controller.setProperties(modelOne);
+		controller.set('userInformation', {
+			fetchUser: function () {
+				return {id: '1'};
+			}
+		});
 		model = controller.gatherFormData();
 		controller.set('albumLink', 'foo');
 		controller.set('image', 'foo');

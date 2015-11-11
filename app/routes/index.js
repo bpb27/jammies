@@ -28,13 +28,13 @@ export default Ember.Route.extend({
 
 	processUser: function (name, id) {
 		var user = this.locateExistingUser(name)[0];
-		var userIsUpdated = this.userIsUpdated(user)
+		var userIsUpdated = this.userIsUpdated(user);
 
 		if (!userIsUpdated) {
 			if (user)
 				this.updateExistingUser(user, name, id);
 			else if (name && id)
-				this.createNewUser(name, id)
+				this.createNewUser(name, id);
 			else 
 				console.log("Error");
 		}
