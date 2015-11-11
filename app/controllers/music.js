@@ -84,7 +84,7 @@ export default Ember.Controller.extend({
       var all = 'spotify:trackset:All Jams:';
       var links = music.map(function(entry){
          if (entry.get('spotifyLink'))
-            return entry.get('spotifyLink').split(':')[2] + ','
+            return entry.get('spotifyLink').split(':')[2] + ',';
       }).join('');
       
       all = all + links;
@@ -141,7 +141,7 @@ export default Ember.Controller.extend({
       var four = [];
 
       if (this.get('numberOfColumns') === 3) {
-         for (var i = 0; i < music.length; i++) {
+         for (let i = 0; i < music.length; i++) {
             if (one.length === three.length) 
                one.push(music[i]);
             else if (one.length > two.length) 
@@ -153,7 +153,7 @@ export default Ember.Controller.extend({
       }
 
       if (this.get('numberOfColumns') === 4) {
-         for (var i = 0; i < music.length; i++) {
+         for (let i = 0; i < music.length; i++) {
             if (one.length === four.length) 
                one.push(music[i]);
             else if (one.length > two.length)
@@ -267,7 +267,7 @@ export default Ember.Controller.extend({
             postedBy: this.get('currentUser.displayName'),
             submittedByID: this.get('userInformation').fetchUserProperty('id'), 
             createdAt: new Date(),
-         }
+         };
 
          if (!newComment['comment'] || !newComment['postedBy'] || !newComment['submittedByID']) return; //handle error
 

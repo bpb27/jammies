@@ -11,7 +11,7 @@ export default Ember.Component.extend({
 		if (collection && query) {
 			return collection.filter(function(item){
 				return item.indexOf(query) === 0;
-			})[0]
+			})[0];
 		}
 
 	}.property('tagText'),

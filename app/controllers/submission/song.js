@@ -27,13 +27,25 @@ export default Ember.Controller.extend({
 		this.set('albumLink', null);
 	},
 
-	determineSpotifyLink: function (spotLink) {
-		if (spotLink.indexOf('http') !== -1)
-			return spotLink.split('/')[4];
-		if (spotLink.indexOf(':') !== -1)
-			return spotLink.split(':')[2];
+	determineSpotifyLink: function (link) {
+		if (!link)
+			return link;
+		if (link.indexOf('iframe') !== -1)
+			return link.split(' ')[1].split('%')[2].replace('"', '');
+		if (link.indexOf('http') !== -1)
+			return link.split('/')[4];
+		if (link.indexOf(':') !== -1)
+			return link.split(':')[2];
 
-		return spotLink;
+		return link;
+	},
+
+	determineYoutubeLink: function (link) {
+		if (!link)
+			return link;
+		if (link.indexOf('=') !== -1)
+			return link.split('=')[1];
+		return link;
 	},
 
 	errorErase: function () {
@@ -60,9 +72,9 @@ export default Ember.Controller.extend({
 			
 			//Links
 			albumLink: this.get('albumLink'),
-			spotifyLink: this.get('spotify'), //should this be sanitized?
+			spotifyLink: this.determineSpotifyLink(this.get('spotify')),
 			soundCloudLink: this.get('soundcloud'),
-			youTubeLink: this.get('youtube'),
+			youTubeLink: this.determineYoutubeLink(this.get('youtube')),
 
 			//User data
 			submittedBy: this.get('session.currentUser.displayName'),
@@ -91,7 +103,6 @@ export default Ember.Controller.extend({
 
 		Ember.$.ajax('https://api.spotify.com/v1/tracks/' + spotId).then(function(data){
 			
-			console.log(data);
 			this.set('title', data.name);
 			this.set('artist', data.artists[0].name);
 			this.set('album', data.album.name);
@@ -130,7 +141,7 @@ export default Ember.Controller.extend({
 		else if (!record.review) 
 			error = 'A review, madam.';
 		else if (!record.year)
-			error = 'A year, madam.'
+			error = 'A year, madam.';
 
 		if (error)
 			this.set('error', error);

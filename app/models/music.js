@@ -70,8 +70,8 @@ export default DS.Model.extend({
 		.objectAt(0);
 	}.property('comments.[]'),
 
-	returnPlayPayload: function (type, source) {
-		var source = this.returnPreferredLink(source)
+	returnPlayPayload: function (type, musicSource) {
+		var source = this.returnPreferredLink(musicSource);
 		return {
 			link: source.link,
 			albumLink: this.get('albumLink'),
