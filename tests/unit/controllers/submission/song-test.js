@@ -6,118 +6,257 @@ moduleFor('controller:submission/song', {
   // needs: ['controller:foo']
 });
 
-// Replace this with your real tests.
-test('it exists', function (assert) {
-  var controller = this.subject();
-  assert.ok(controller);
+test('Determine spotify query checks for youtube link and creates a query based on artist and title', function (assert) {
+	var controller = this.subject();
+	controller.set('youtube', 'link');
+	controller.set('title', 'inertiatic esp');
+	controller.set('artist', 'mars volta');
+
+	var link = "https://api.spotify.com/v1/search?q=track%3Ainertiatic+esp+artist%3Amars+volta&type=track";
+
+	assert.equal(controller.determineSpotifyQuery(), link);
+
 });
 
-test('Spotify link parsed correctly', function (assert) {
+test('Determine spotify id correctly parses input', function (assert) {
 	var controller = this.subject();
-	
+
 	var link = 'https://open.spotify.com/track/5OzHuTzS6K5mn8oQg7owRf';
 	var uri = 'spotify:track:5OzHuTzS6K5mn8oQg7owRf';
-	var embed = '<iframe src="https://embed.spotify.com/?uri=spotify%3Atrack%5OzHuTzS6K5mn8oQg7owRf" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>'
+	var embed = '<iframe src="https://embed.spotify.com/?uri=spotify%3Atrack%5OzHuTzS6K5mn8oQg7owRf" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>';
 	var id = '5OzHuTzS6K5mn8oQg7owRf';
 
-	assert.equal(controller.determineSpotifyLink(link), id);
-	assert.equal(controller.determineSpotifyLink(uri), id);
-	assert.equal(controller.determineSpotifyLink(embed), id);
+	assert.equal(controller.determineSpotifyId(link), id);
+	assert.equal(controller.determineSpotifyId(uri), id);
+	assert.equal(controller.determineSpotifyId(embed), id);
 
 });
 
-test('Youtube link parsed correctly', function (assert) {
+test('Determine youtube id correctly parses input', function (assert) {
 	var controller = this.subject();
-	
+
 	var link = 'https://www.youtube.com/watch?v=bw3S1dlsGzU';
 	var id = 'bw3S1dlsGzU';
 
-	assert.equal(controller.determineYoutubeLink(link), id);
-	assert.equal(controller.determineYoutubeLink(id), id);
+	assert.equal(controller.determineYoutubeId(link), id);
+	assert.equal(controller.determineYoutubeId(id), id);
 
 });
 
-test('Gathers all form data and adds necessary properties', function (assert) {
+test('Spotify only submission', function (assert) {
 	var controller = this.subject();
-	var model;
+  var songData;
 
 	Ember.run(function(){
 		setSession(controller);
-		controller.setProperties(modelOne);
-		controller.set('userInformation', {
-			fetchUser: function () {
-				return {id: '1'};
-			}
-		});
-		model = controller.gatherFormData();
-	});
-		
-	controller.get('formFields').forEach(function(field){
-		if (field === 'spotify')
-			assert.equal(controller.get(field), model['spotifyLink']);
-		else if (field === 'youtube')
-			assert.equal(controller.get(field), model['youTubeLink']);
-		else if (field === 'soundcloud')
-			assert.equal(controller.get(field), model['soundCloudLink']);
-		else
-			assert.equal(controller.get(field), model[field]);
+
+		controller.setProperties(spotifyOnlyFormData);
+		controller.set('image', spotifyOnlySubmission['image']);
+		controller.set('albumLink', spotifyOnlySubmission['albumLink']);
+
+		songData = controller.gatherFormData();
+    assert.ok(controller.validate(songData));
+
 	});
 
-	//Model properties not based on user input
-	assert.equal(model['albumLink'], 'albumLink');
-	assert.equal(model['submittedBy'], 'Brendan');
-	assert.equal(model['submittedByID'], '1');
-	assert.equal(model['totalPlays'], 1);
-	assert.equal(model['video'], true);
-
-	assert.ok(model['createdAt']);
+  dataMatch(songData, spotifyOnlySubmission, assert);
 
 });
 
-test('Clears all form fields in event of save or discard', function (assert) {
+test('Youtube only submission', function (assert) {
 	var controller = this.subject();
-	var model;
+  var songData;
 
 	Ember.run(function(){
 		setSession(controller);
-		controller.setProperties(modelOne);
-		controller.set('userInformation', {
-			fetchUser: function () {
-				return {id: '1'};
-			}
-		});
-		model = controller.gatherFormData();
-		controller.set('albumLink', 'foo');
-		controller.set('image', 'foo');
-		controller.set('hasVideo', true);
+
+		controller.setProperties(youtubeOnlyFormData);
+    controller.set('hasVideo', true);
+
+		songData = controller.gatherFormData();
+    assert.ok(controller.validate(songData));
+
 	});
 
-	Ember.run(function(){
-		controller.clearForm();
-	});
-
-	controller.get('formFields').forEach(function(field){
-		assert.equal(controller.get(field), '');
-	});
+  dataMatch(songData, youtubeOnlySubmission, assert);
 
 });
+
+test('Spotify and Youtube submission', function (assert) {
+	var controller = this.subject();
+  var songData;
+
+	Ember.run(function(){
+		setSession(controller);
+
+		controller.setProperties(spotifyAndYoutubeFormData);
+		controller.set('image', spotifyAndYoutubeSubmission['image']);
+		controller.set('albumLink', spotifyAndYoutubeSubmission['albumLink']);
+
+		songData = controller.gatherFormData();
+    assert.ok(controller.validate(songData));
+
+	});
+
+  dataMatch(songData, spotifyAndYoutubeSubmission, assert);
+
+});
+
+test('Soundcloud only submission', function (assert) {
+	var controller = this.subject();
+  var songData;
+
+	Ember.run(function(){
+		setSession(controller);
+
+		controller.setProperties(soundcloudOnlyFormData);
+
+		songData = controller.gatherFormData();
+    assert.ok(controller.validate(songData));
+
+	});
+
+  dataMatch(songData, soundcloudOnlySubmission, assert);
+
+});
+
 
 
 function setSession (controller) {
-	controller.set('session', {currentUser: {displayName: 'Brendan'}});
+	controller.set('session', {currentUser: {displayName: 'Brendan Brown'}});
 	controller.set('userProfiles', {user: {id: '1'}});
+  controller.set('userInformation', { fetchUser: function () { return {id: '1'}; } });
 }
 
-var modelOne = {
-	album: 'album',
-	albumLink: 'albumLink',
-	artist: 'artist', 
-	review: 'review', 
-	image: 'image', 
-	title: 'title',
-	year: 'year',
-	spotify: 'spotify', 
-	youtube: 'youtube', 
-	soundcloud: 'soundcloud',
-	hasVideo: true
+function dataMatch (results, submissionToMatch, assert) {
+  var fields = [
+    'album',
+    'review',
+    'title',
+    'year',
+    'spotifyLink',
+    'soundCloudLink',
+    'youTubeLink',
+    'video',
+    'totalPlays',
+    'image',
+    'submittedBy',
+    'submittedByID'
+  ];
+
+  fields.forEach(function (field) {
+    assert.equal(results[field], submissionToMatch[field], field);
+  });
+
+  assert.ok(results['createdAt'], 'Created At');
+  
+}
+
+var spotifyOnlyFormData = {
+  "album": "Flesh without Blood",
+  "artist": "Grimes",
+  "review": "Good",
+  "title": "Flesh without Blood",
+  "year": "2015",
+  "spotify": "spotify:track:1JYtlIFdYms6nZNf2K7Yys"
+};
+
+var spotifyOnlySubmission = {
+  "album": "Flesh without Blood",
+  "artist": "Grimes",
+  "createdAt": "2015-12-12T17:13:25.430Z",
+  "review": "Good",
+  "image": "https://i.scdn.co/image/0faef4408eb4f1eed3f4876532a0987fd2ee1d10",
+  "title": "Flesh without Blood",
+  "totalPlays": 1,
+  "video": false,
+  "year": "2015",
+  "albumLink": "spotify:album:2fsDt7nVNKN47KT23Bki49",
+  "spotifyLink": "spotify:track:1JYtlIFdYms6nZNf2K7Yys",
+  "soundCloudLink": undefined,
+  "youTubeLink": undefined,
+  "submittedBy": "Brendan Brown",
+  "submittedByID": "1"
+};
+
+var youtubeOnlyFormData = {
+  "album": "Teens of Style",
+  "artist": "Car Seat Headrest",
+  "review": "Good",
+  "title": "Something Soon",
+  "year": "2015",
+  "youtube": "https://www.youtube.com/watch?v=WjnEkJa2Law"
+};
+
+var youtubeOnlySubmission = {
+  "album": "Teens of Style",
+  "albumLink": undefined,
+  "artist": "Car Seat Headrest",
+  "createdAt": "2015-12-12T18:01:46.159Z",
+  "review": "Good",
+  "soundCloudLink": undefined,
+  "image": "assets/images/vinylcover.jpg",
+  "title": "Something Soon",
+  "totalPlays": 1,
+  "video": true,
+  "year": "2015",
+  "spotifyLink": undefined,
+  "youTubeLink": "WjnEkJa2Law",
+  "submittedBy": "Brendan Brown",
+  "submittedByID": "1"
+};
+
+var spotifyAndYoutubeFormData = {
+  "album": "Flesh without Blood",
+  "artist": "Grimes",
+  "review": "Good",
+  "title": "Flesh without Blood",
+  "year": "2015",
+  "spotify": "spotify:track:1JYtlIFdYms6nZNf2K7Yys",
+  "youtube": "https://www.youtube.com/watch?v=Tv9YoYCKNoE"
+};
+
+var spotifyAndYoutubeSubmission = {
+  "album": "Flesh without Blood",
+  "artist": "Grimes",
+  "createdAt": "2015-12-12T17:15:12.585Z",
+  "review": "Good",
+  "image": "https://i.scdn.co/image/0faef4408eb4f1eed3f4876532a0987fd2ee1d10",
+  "title": "Flesh without Blood",
+  "totalPlays": 1,
+  "video": false,
+  "year": "2015",
+  "albumLink": "spotify:album:2fsDt7nVNKN47KT23Bki49",
+  "spotifyLink": "spotify:track:1JYtlIFdYms6nZNf2K7Yys",
+  "youTubeLink": "Tv9YoYCKNoE",
+  "soundCloudLink": undefined,
+  "submittedBy": "Brendan Brown",
+  "submittedByID": "1"
+};
+
+var soundcloudOnlyFormData = {
+  "album": "Unreleased",
+  "artist": "Kendrick Lamar",
+  "review": "Good",
+  "title": "Black Friday",
+  "year": "2015",
+  "soundcloud": "https://soundcloud.com/topdawgent/kendrick-lamar-black-friday"
+};
+
+var soundcloudOnlySubmission = {
+  "album": "Unreleased",
+  "albumLink": undefined,
+  "artist": "Kendrick Lamar",
+  "createdAt": "2015-12-12T19:52:45.752Z",
+  "review": "Good",
+  "image": "assets/images/vinylcover.jpg",
+  "title": "Black Friday",
+  "totalPlays": 1,
+  "video": false,
+  "year": "2015",
+  "spotifyLink": undefined,
+  "youTubeLink": undefined,
+  "soundCloudLink": "https://soundcloud.com/topdawgent/kendrick-lamar-black-friday",
+  "submittedBy": "Brendan Brown",
+  "submittedByID": "1"
 };
