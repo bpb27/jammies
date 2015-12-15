@@ -9,13 +9,31 @@
 	</div>
 	<div class="col-md-6">
 		<h6>Add at least one link:</h6>
-		{{input value=spotify placeholder="Spotify URI" class="form-control"}}
-		{{input value=youtube placeholder="YouTube Link" class="form-control"}}
+
+		{{input value=spotify placeholder="Spotify URI" class="form-control link-input"}}
+		<div class="video-demo">?
+			<video autoplay loop muted>
+				<source src="assets/videos/vid-spotify.mp4" type="video/mp4">
+			</video>
+		</div>
+
+		{{input value=youtube placeholder="YouTube Link" class="form-control link-input"}}
+		<div class="video-demo">?
+			<video autoplay loop muted>
+				<source src="assets/videos/vid-youtube.mp4" type="video/mp4">
+			</video>
+		</div>
 		{{#if youtube}}
 			<h5>Video? {{input type="checkbox" name="Video" checked=hasVideo}}</h5>
 		{{/if}}
-		{{input value=soundcloud placeholder="SoundCloud Embed Link" class="form-control"}}
-		
+
+		{{input value=soundcloud placeholder="SoundCloud Embed Link" class="form-control link-input"}}
+		<div class="video-demo">?
+			<video autoplay loop muted>
+				<source src="assets/videos/vid-soundcloud.mp4" type="video/mp4">
+			</video>
+		</div>
+
 		<h6>Why it's cool:</h6>
 		{{textarea value=review placeholder="Your thoughts..." class="form-control"}}
 
@@ -24,7 +42,7 @@
 		{{input value=artist placeholder="Artist" class="form-control"}}
 		{{input value=album placeholder="Album" class="form-control"}}
 		{{input value=year placeholder="Year" class="form-control"}}
-		
+
 	</div>
 </div>
 <img class="background-image-bottom" src="assets/images/records.jpg" />

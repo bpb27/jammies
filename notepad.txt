@@ -1,21 +1,25 @@
 TODO:
+BEFORE RELEASE
+- Add videos showing how to submit
+- Favorites
+- Editing submissions
+- Make authed and non-auth paths
+- Link to single submission
+- Play all youtube
 - Small browser width issues with navbar, columns, song submission
+- Get all tests to work plus solid testing coverage 
 
+Nice to have:
 - New notification system
-- Edit songs
 - Edit comments
-- Edit tags?
-- User favorites
+- Edit tags
+- Spotify link queries
 - Abstract spotify parses and ajax calls to service or model
-- Properly initialize userProfiles, still needs that bullshit first get
-- Auth control of all routes
-- Error system?
-- Or maybe the tag artist columns
 
 
 Using github:
 
 1) Make changes
-2) Git add -A
+2) Git add -all .
 3) Git commit -m 'commit message'
 4) git push -u origin master

@@ -24,7 +24,7 @@ export default Ember.Controller.extend({
 
    aristList: function () {
       var hash = {};
-      
+
       this.get('model.songs').forEach(function(song){
          var artist = song.get('artist');
          if (hash[artist])
@@ -32,12 +32,12 @@ export default Ember.Controller.extend({
          else
             hash[artist] = 1;
       });
-      
+
       var list = Object.keys(hash).map(function(name){
          return {
             name: name,
             tally: hash[name]
-         }
+         };
       })
       .sortBy(this.get('artistSort'));
 
@@ -52,7 +52,7 @@ export default Ember.Controller.extend({
          return {
             name: tag.get('name'),
             tally: tag.get('tally.content')
-         }
+         };
       })
       .uniq()
       .sortBy(this.get('tagSort'));
@@ -60,7 +60,7 @@ export default Ember.Controller.extend({
       if (this.get('tagSort') === 'tally')
          return list.reverse();
       return list;
-   
+
    }.property('model.tags.isUpdating', 'model.tags.length', 'tagSort'),
 
 	filteredContent: function () {
@@ -69,7 +69,7 @@ export default Ember.Controller.extend({
     	var rx = new RegExp(query, 'gi');
       var songs = music.filter(function(song) {
          if (this.showOnlyMatch(song))
-            return this.queryMatch(song, rx);   
+            return this.queryMatch(song, rx);
       }.bind(this));
 
       songs = this.sortAndLimitModel(songs);
@@ -86,7 +86,7 @@ export default Ember.Controller.extend({
          if (entry.get('spotifyLink'))
             return entry.get('spotifyLink').split(':')[2] + ',';
       }).join('');
-      
+
       all = all + links;
       this.set('playAllLinks', all);
    },
@@ -113,21 +113,21 @@ export default Ember.Controller.extend({
    getSongTags: function (song) {
       if (!song.get('tags'))
          return '';
-      
+
       return song.get('tags').map(function(tag){
-         return tag.get('name')
+         return tag.get('name');
       }).join();
    },
 
    queryMatch: function (song, rx) {
   		if (this.validModel(song)) {
-         return (song.get('title').match(rx) 
-	      		|| song.get('artist').match(rx) 
-	      		|| song.get('album').match(rx) 
-	      		|| song.get('submittedBy').match(rx) 
+         return (song.get('title').match(rx)
+	      		|| song.get('artist').match(rx)
+	      		|| song.get('album').match(rx)
+	      		|| song.get('submittedBy').match(rx)
 	      		|| song.get('year').toString().match(rx)
                || this.getSongTags(song).match(rx)); //make tag searches exact
-  		}    	
+  		}
   	},
 
    scrollUp: function () {
@@ -142,11 +142,11 @@ export default Ember.Controller.extend({
 
       if (this.get('numberOfColumns') === 3) {
          for (let i = 0; i < music.length; i++) {
-            if (one.length === three.length) 
+            if (one.length === three.length)
                one.push(music[i]);
-            else if (one.length > two.length) 
+            else if (one.length > two.length)
                two.push(music[i]);
-            else 
+            else
                three.push(music[i]);
          }
          return [one, two, three];
@@ -154,13 +154,13 @@ export default Ember.Controller.extend({
 
       if (this.get('numberOfColumns') === 4) {
          for (let i = 0; i < music.length; i++) {
-            if (one.length === four.length) 
+            if (one.length === four.length)
                one.push(music[i]);
             else if (one.length > two.length)
                two.push(music[i]);
-            else if (two.length > three.length) 
+            else if (two.length > three.length)
                three.push(music[i]);
-            else 
+            else
                four.push(music[i]);
          }
          return [one, two, three, four];
@@ -169,7 +169,7 @@ export default Ember.Controller.extend({
    },
 
    showOnlyMatch: function (song) {
-      if (this.get('showOnlyVideos') && !song.get('hasVideo')) 
+      if (this.get('showOnlyVideos') && !song.get('hasVideo'))
          return;
       return true;
    },
@@ -181,14 +181,14 @@ export default Ember.Controller.extend({
   			model.reverse();
 
   		return model.slice(0, this.get('songLimit'));
-  		
+
   	},
 
   	validModel: function (model) {
-      if (model.get('title') 
-  			&& model.get('artist') 
-  			&& model.get('album') 
-  			&& model.get('submittedBy') 
+      if (model.get('title')
+  			&& model.get('artist')
+  			&& model.get('album')
+  			&& model.get('submittedBy')
   			&& model.get('year')) // remove?
   			return true;
   	},
@@ -203,10 +203,10 @@ export default Ember.Controller.extend({
 
          if (type === 'video')
             return this.send('playVideo', song);
-         
+
          var defaultSource = this.get('userInformation').fetchUserProperty('sourceDefault');
          var playPayload = song.returnPlayPayload(type, defaultSource);
-         
+
          playPayload = this.determineEmbedFrame(playPayload);
          song.set('totalPlays', song.get('totalPlays') + 1);
          song.save();
@@ -220,7 +220,7 @@ export default Ember.Controller.extend({
             linkType: 'spotify',
             isAlbum: true
          });
-         
+
          this.container.lookup('controller:application').send('playRequest', playPayload);
       },
 
@@ -261,11 +261,11 @@ export default Ember.Controller.extend({
       },
 
       submitComment: function (text, entryId) {
-         
+
          var newComment = {
             comment: text,
             postedBy: this.get('currentUser.displayName'),
-            submittedByID: this.get('userInformation').fetchUserProperty('id'), 
+            submittedByID: this.get('userInformation').fetchUserProperty('id'),
             createdAt: new Date(),
          };
 
@@ -283,11 +283,11 @@ export default Ember.Controller.extend({
       },
 
       submitTag: function (text, entryId) {
-         if (!text) 
+         if (!text)
             return; //also ensure auth
 
          var tag = this.get('model.tags').findBy('name', text.toLowerCase());
-         
+
          if (!tag)
             tag = this.store.createRecord('tag', {name: text.toLowerCase()});
 
