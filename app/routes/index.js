@@ -5,7 +5,7 @@ export default Ember.Route.extend({
 		return this.store.findAll('user');
 	},
 
-	createNewUser: function (name, id) {
+	createNewUser: function (id, name) {
 		var newUser = this.store.createRecord('user', {
 			displayName: name,
 			gId: id,
@@ -14,50 +14,30 @@ export default Ember.Route.extend({
 			sourceDefault: 'spotify'
 		});
 
-		newUser.save();
+		newUser.save().then(function (user) {
+			console.log("New user " + name + " created.");
+			this.get('userInformation').setUsers();
+		}.bind(this));
 	},
 
-	locateExistingUser: function (name) {
+	findUser: function (id) {
 		return this.get('context.content').filter(function(user){
-			if (name.indexOf(user['_data']['firstName']) !== -1)
-				return true;
-			if (name.indexOf(user['_data']['lastName']) !== -1 && user['_data']['lastName'] !== 'Brown')
-				return true;
-		});
+			if (user['_data'] && user['_data']['gId'] === id) return true;
+			if (user.get && user.get('gId') === id) return true;
+		})[0];
 	},
 
-	processUser: function (name, id) {
-		var user = this.locateExistingUser(name)[0];
-		var userIsUpdated = this.userIsUpdated(user);
-
-		if (!userIsUpdated) {
-			if (user)
-				this.updateExistingUser(user, name, id);
-			else if (name && id)
-				this.createNewUser(name, id);
-			else 
-				console.log("Error");
-		}
-	},
-
-	updateExistingUser: function (user, name, id) {
-		this.store.findRecord('user', user['id']).then(function(model){
-			model.set('gId', id);
-			model.set('displayName', name);
-			model.save();
-		});
-	},
-
-	userIsUpdated: function (user) {
-		if (user && user['_data'] && user['_data']['gId']) 
-			return true;
+	processUser: function (id, name) {
+		var user = this.findUser(id);
+		if (!user)
+				this.createNewUser(id, name);
 	},
 
 	actions: {
-    	signIn: function(provider) {
+		signIn: function(provider) {
 			this.get("session").open("firebase", { provider: provider}).then(function(data) {
-				this.processUser(data.currentUser.displayName, data.currentUser.id);
+				this.processUser(data.currentUser.id, data.currentUser.displayName);
 			}.bind(this));
-    	}
-  	}
+		}
+	}
 });

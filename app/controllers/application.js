@@ -13,7 +13,7 @@ export default Ember.Controller.extend({
 
   		playRequest: function (request) {
   			this.send('closePlayer');
-			
+
 			Ember.run.next(function(){
 				this.set('isPlaying', true);
 				this.set('playType', request.linkType);
@@ -22,7 +22,7 @@ export default Ember.Controller.extend({
   		},
 
   		toUserRoute: function () {
-  			this.transitionTo('user', this.get('userInformation').fetchUser());
+  			this.transitionToRoute('user', this.get('userInformation').fetchUserProperty('id'));
   		}
   	}
 });

@@ -1,5 +1,5 @@
 <div id="page-songs">
-	<img class="image-background" src="assets/images/sam-cooke.png" />
+	<img class="image-background" src="assets/images/concert.jpeg" />
 
 	<div class="color-bar">
 		<div class="color-bar-single cbs-one"></div>
@@ -10,9 +10,9 @@
 
 	<div class="control-bar">
   		<div class="search-container">
-			{{input 
-				type=text 
-				value=query 
+			{{input
+				type=text
+				value=query
 				class='search-box'
 				placeholder='Search title, artist, album, tags, user...'
 			}}
@@ -28,7 +28,11 @@
 					</button>
 				</a>
 				<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-					<li {{action 'showOnly' 'showOnlyVideos'}}>Videos</li>
+					<li {{action 'showOnly' 'videos'}}>Videos</li>
+					<li {{action 'showOnly' 'favorites'}}>Favorites</li>
+					<li {{action 'showOnly' 'youtube'}}>Youtube Links</li>
+					<li {{action 'showOnly' 'spotify'}}>Spotify Links</li>
+					<li {{action 'showOnly' 'soundcloud'}}>Soundcloud Links</li>
 				</ul>
 			</div>
 			<div class="dropdown">
@@ -42,11 +46,12 @@
 					<li {{action 'sortBy' 'year'}}>Year</li>
 				</ul>
 			</div>
-			<div class="dropdown">
+			<div class="dropdown tags-sidebar-dropdown">
 				<a id="dLabel" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">
 					<button class="btn sorting-btn">Sidebars<span class="caret"></span></button>
 				</a>
 				<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+					<li {{action 'sidebarStick'}}>Show/Hide</li>
 					<li {{action 'sortSidebar' 'artist' 'name'}}>Artist by Name</li>
 					<li {{action 'sortSidebar' 'artist' 'tally'}}>Artist by Popularity</li>
 					<li {{action 'sortSidebar' 'tag' 'name'}}>Tag by Name</li>
@@ -57,52 +62,51 @@
 	</div>
 
 	<div class="page-body">
-		<div class="container">
+		<div class="container center">
+
 			<div class="col-lg-12 video-player-container center">
 				<div class="video-player"></div>
 				<div class="btn-close-video" {{action 'closeVideo'}}>{{fa-icon "times"}}</div>
 			</div>
 
-			<div class="tags-sidebar tags-sidebar-left">
-				<div class="tags-btn-container">
-					{{#each tagList as |item|}}
-						<button class="btn btn-primary btn-sm" {{action 'searchText' item.name}}>
-							<span class="badge">{{item.tally}}</span>
-							<span class="tags-sidebar-label">{{item.name}}</span>
-						</button>
-					{{/each}}
-				</div>
-			</div>
-			<div class="tags-sidebar tags-sidebar-right">
-				<div class="tags-btn-container">
-					{{#each aristList as |item|}}
-						<button class="btn btn-primary btn-sm" {{action 'searchText' item.name}}>
-							<span class="badge">{{item.tally}}</span>
-							<span class="tags-sidebar-label">{{item.name}}</span>
-						</button>
-					{{/each}}
-				</div>
-			</div>
-
-			{{#each filteredContent as |column|}}
-				<div class="col-md-4">
-					{{#each column as |song|}}
+			{{#each filteredContent as |song|}}
 						{{music-entry
 							song=song
 							tagList=tagList
 							favorite='favorite'
+							edit='edit'
 							submitComment='submitComment'
 							submitTag='submitTag'
-			            	deleteComment='deleteComment'
-			            	searchText='searchText'
-			            	loadPlayer='loadPlayer'
-			            	playVideo='playVideo'
+            	deleteComment='deleteComment'
+            	searchText='searchText'
+            	loadPlayer='loadPlayer'
+            	playVideo='playVideo'
 						}}
+			{{/each}}
+
+			<div class="tags-sidebar tags-sidebar-left">
+				<div class="tags-btn-container">
+					{{#each tagList as |item|}}
+						<button class="btn btn-primary btn-sm" {{action 'searchText' item.name}}>
+							<span class="tag-tally">{{item.tally}}</span>
+							<span class="tags-sidebar-label">{{item.name}}</span>
+						</button>
 					{{/each}}
 				</div>
-			{{/each}}
+			</div>
+
+			<div class="tags-sidebar tags-sidebar-right">
+				<div class="tags-btn-container">
+					{{#each aristList as |item|}}
+						<button class="btn btn-primary btn-sm" {{action 'searchText' item.name}}>
+							<span class="tag-tally">{{item.tally}}</span>
+							<span class="tags-sidebar-label">{{item.name}}</span>
+						</button>
+					{{/each}}
+				</div>
+			</div>
+
 		</div>
 	</div>
 
 </div>
-

@@ -4,27 +4,62 @@ export default Ember.Service.extend({
 
 	store: Ember.inject.service(),
 	session: Ember.inject.service(),
+	attempts: 0,
+	users: undefined,
+	user: undefined,
 
-	setUsers: function () {
-		this.fetchUsers().then(function(users){
-			this.set('users', users);
-		}.bind(this));
-	}.on('init'),
+	_setup: function () {
+		this.getUsers();
+  }.on('init'),
 
-	fetchUser: function () {
-		if (this.get('session.currentUser.id'))
-			return this.get('users').findBy('gId', this.get('session.currentUser.id'));
+	getUsers: function () {
+		Ember.RSVP
+			.resolve(this.get('store').query('user', {}))
+			.then(function(users){
+				if (this.ensureUsersAreLoaded(users)) {
+					console.log("Users loaded.");
+					this.set('users', users);
+				}
+	      else {
+	        console.log("Loading users again.");
+					this.incrementProperty('attempts');
+					if (this.get('attempts') <= 3)
+	        	Ember.run.later(this.getUsers.bind(this), 2000);
+	      }
+	    }.bind(this));
 	},
+
+  ensureUsersAreLoaded: function (users) {
+    if (users && users.get && users.isLoaded)
+      if (Array.isArray(users.get('content')) && users.get('content').length > 1)
+        return true;
+  },
+
+	findUser: function () {
+		var gId = this.get('session.currentUser.id');
+		var users = this.get('users');
+		var store = this.get('store');
+
+		if (!gId || !users)
+			return;
+
+		var internalUserModel = users.get('content').filter(function(user_model){
+			return user_model['_data']['gId'] === gId;
+		})[0];
+
+		if (internalUserModel) {
+			Ember.RSVP
+				.resolve(store.find('user', internalUserModel.id))
+				.then(function(user){
+					console.log(user.get('displayName') + ' has signed in.');
+					this.set('user', user);
+				}.bind(this));
+		}
+
+	}.observes('users', 'session.currentUser'),
 
 	fetchUserProperty: function (property) {
-		var userModel = this.fetchUser();
-		if (userModel && userModel.get)
-			return userModel.get(property);
-	},
-
-	fetchUsers: function () {
-		return this.get('store').findAll('user').then(function(users){
-			return users;
-		});
+		return this.get('user') ? this.get('user').get(property) : null;
 	}
+
 });

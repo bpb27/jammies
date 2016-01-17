@@ -18,7 +18,8 @@ export default Ember.Component.extend({
 	}.property(),
 
 	isCreator: function () {
-		return false;
+		if (this.get('userInformationAvailable'))
+			return this.get('song.submittedByID') === this.get('userInformation').fetchUserProperty('id');
 	}.property(),
 
 	isBanned: function () {
@@ -26,7 +27,11 @@ export default Ember.Component.extend({
 	}.property(),
 
 	isFavorite: function () {
-		return false;
+		if (this.get('userInformationAvailable')) {
+			var favorites = this.get('userInformation').fetchUserProperty('favorites');
+			if (favorites)
+				return ~favorites.indexOf(this.get('song.id'));
+		}
 	}.property(),
 
 	tagCollection: function () {
@@ -43,6 +48,10 @@ export default Ember.Component.extend({
 		return this.get('song.tags').uniq();
 	}.property('song.tags.length'),
 
+	userInformationAvailable: function () {
+		return this.get('userInformation') && this.get('userInformation').fetchUserProperty;
+	}.property('userInformation'),
+
 	actions: {
 
 		deleteComment: function (commentId) {
@@ -54,11 +63,18 @@ export default Ember.Component.extend({
 			this.set('isShowingComments', false);
 		},
 
-		favorite: function (type) {
-			this.sendAction('favorite', this.get('song.id'), type);
+		edit: function () {
+			this.sendAction('edit', this.get('song.id'));
 		},
 
-		play: function (type) {			
+		favorite: function (isFavorite) {
+			this.sendAction('favorite', this.get('song.id'));
+			this.set('isFavorite', isFavorite);
+		},
+
+		play: function (type) {
+			if (type === 'album' && !this.get('song.albumLink'))
+				return;
 			this.sendAction('loadPlayer', this.get('song'), type);
 		},
 

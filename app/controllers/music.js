@@ -5,22 +5,17 @@ import Ember from 'ember';
 export default Ember.Controller.extend({
 	currentUser: Ember.computed.alias('session.currentUser'),
 	error: '',
-   numberOfColumns: 3,
+  numberOfColumns: 3,
 	query: '',
 	playAllLinks: '',
+	showOnlyProperty: '',
 	showOnlyFavorites: false,
 	showOnlyVideos: false,
 	songLimit: 27,
 	sortAscending: true,
 	sortProperties: ['createdAt'],
-   artistSort: 'name',
-   tagSort: 'tally',
-
-   _setup: function () {
-      Ember.run.later(function() {
-         this.set('tagSort', 'name'); // tally is promise that doesn't render the first time...
-      }.bind(this), 4000);
-   }.on('init'),
+  artistSort: 'name',
+  tagSort: 'name',
 
    aristList: function () {
       var hash = {};
@@ -67,23 +62,24 @@ export default Ember.Controller.extend({
     	var music = this.get('model.songs');
     	var query = Ember.String.htmlSafe(this.get('query')).string;
     	var rx = new RegExp(query, 'gi');
+			var favorites = this.get('userInformation.user.favorites');
       var songs = music.filter(function(song) {
-         if (this.showOnlyMatch(song))
+         if (this.showOnlyMatch(song, favorites))
             return this.queryMatch(song, rx);
       }.bind(this));
 
       songs = this.sortAndLimitModel(songs);
       this.gatherPlayAllLinks(songs);
-      songs = this.setMusicColumns(songs); //deal with small browser width
+      //songs = this.setMusicColumns(songs); //deal with small browser width
 
       return songs;
 
-  	}.property('model.songs.isUpdating', 'query', 'sortProperties.[]', 'sortAscending', 'showOnlyFavorites', 'showOnlyVideos'),
+  	}.property('model.songs.isUpdating', 'query', 'sortProperties.[]', 'sortAscending', 'showOnlyProperty'),
 
   	gatherPlayAllLinks: function (music) {
       var all = 'spotify:trackset:All Jams:';
       var links = music.map(function(entry){
-         if (entry.get('spotifyLink'))
+         if (entry.get('spotifyLink') && entry.get('spotifyLink').indexOf('spotify:track:') === 0)
             return entry.get('spotifyLink').split(':')[2] + ',';
       }).join('');
 
@@ -126,7 +122,7 @@ export default Ember.Controller.extend({
 	      		|| song.get('album').match(rx)
 	      		|| song.get('submittedBy').match(rx)
 	      		|| song.get('year').toString().match(rx)
-               || this.getSongTags(song).match(rx)); //make tag searches exact
+            || this.getSongTags(song).match(rx)); //make tag searches exact
   		}
   	},
 
@@ -168,10 +164,23 @@ export default Ember.Controller.extend({
 
    },
 
-   showOnlyMatch: function (song) {
-      if (this.get('showOnlyVideos') && !song.get('hasVideo'))
-         return;
-      return true;
+   showOnlyMatch: function (song, favorites) {
+			var property = this.get('showOnlyProperty');
+			if (property) {
+				if (property === 'videos' && !song.get('hasVideo'))
+		 			return false;
+				else if (property === 'favorites' && favorites.indexOf(song.get('id')) === -1)
+					return false;
+				else if (property === 'youtube' && !song.get('youTubeLink'))
+					return false;
+				else if (property === 'spotify' && !song.get('spotifyLink'))
+					return false;
+				else if (property === 'soundcloud' && !song.get('soundCloudLink'))
+					return false;
+			}
+
+			return true;
+
    },
 
   	sortAndLimitModel: function (model) {
@@ -198,6 +207,26 @@ export default Ember.Controller.extend({
          Ember.$('.video-player-container .video-player').html('');
          Ember.$('.video-player-container').removeClass('playing');
       },
+
+			edit: function (songId) {
+				this.transitionToRoute('edit', songId);
+			},
+
+			favorite: function (songId) {
+				var favorites = this.get('userInformation').fetchUserProperty('favorites') || '';
+
+				if (~favorites.indexOf(songId))
+					favorites = favorites.replace(songId + ',', '');
+				else
+					favorites += songId + ',';
+
+				var user = this.get('userInformation.user');
+
+				if (user) {
+					user.set('favorites', favorites);
+					user.save();
+				}
+			},
 
       loadPlayer: function (song, type) {
 
@@ -242,12 +271,22 @@ export default Ember.Controller.extend({
       },
 
       showOnly: function (property) {
-         if (this.get(property))
-            this.set(property, false);
-         else
-            this.set(property, true);
-         this.set(property === 'showOnlyFavorites' ? 'showOnlyVideos' : 'showOnlyFavorites', false);
+				if (this.get('showOnlyProperty') === property)
+					this.set('showOnlyProperty', '');
+				else
+					this.set('showOnlyProperty', property);
       },
+
+			sidebarStick: function () {
+				if (Ember.$('.tags-sidebar-left').css('display') !== 'none') {
+					Ember.$('.tags-sidebar-left').css({display:'none'});
+					Ember.$('.tags-sidebar-right').css({display:'none'});
+				}
+				else {
+					Ember.$('.tags-sidebar-left').css({display:'inline-block'});
+					Ember.$('.tags-sidebar-right').css({display:'inline-block'});
+				}
+			},
 
       sortBy: function (property) {
   			if (this.get('sortProperties')[0] === property)

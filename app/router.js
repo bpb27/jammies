@@ -12,6 +12,7 @@ Router.map(function() {
   this.route('submission', function() {
     this.route('song');
   });
+  this.route('edit', { path: '/edit/:post_id' });
 });
 
 export default Router;

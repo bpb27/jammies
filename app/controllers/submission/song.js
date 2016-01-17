@@ -79,7 +79,7 @@ export default Ember.Controller.extend({
 
 			//User data
 			submittedBy: this.get('session.currentUser.displayName'),
-			submittedByID: this.get('userInformation').fetchUser()['id']
+			submittedByID: this.get('userInformation.user')['id']
 
 		};
 	},
@@ -179,7 +179,7 @@ export default Ember.Controller.extend({
 	actions: {
 
 		submit: function () {
-			if (!this.get('userInformation') || !this.get('userInformation').fetchUser())
+			if (!this.get('userInformation.user'))
 				return this.set('error', 'Please sign in to submit a song.');
 
 			// if (this.get('youtube') && !this.get('spotify')) {

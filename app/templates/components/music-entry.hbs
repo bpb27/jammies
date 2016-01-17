@@ -1,58 +1,70 @@
-<div class="music-content">
-	<div class="title">
-		<span class="pointer" {{action 'play' 'song'}}>{{song.title}} {{fa-icon "play-circle"}}</span>
-	</div>
-	<div class="artist">
-		<span class="pointer" {{action 'searchText' song.artist}}>by {{song.artist}}</span>
-	</div>
-	<img class="music-image-small full-width" src="{{imageToDisplay}}">
-	<div class="album">
+<div class="music-content top-margin">
+	<div class="left inline" {{action 'play' 'album'}}>
+		<img class="music-image-small {{if song.albumLink 'pointer'}}" src="{{imageToDisplay}}">
 		{{#if song.albumLink}}
-	 		<span class="pointer" {{action 'play' 'album'}}>{{song.album}} ({{song.year}}) {{fa-icon "play-circle"}}</span>
-	 	{{else}}
-			{{song.album}} ({{song.year}})
+			<div class="pointer play-album full-width">Play Album</div>
 		{{/if}}
 	</div>
-	{{#if song.hasVideo}}
-		<div class="video pointer" {{action 'play' 'video'}}>
-			Video {{fa-icon 'fa fa-youtube-play'}}
+	<div class="right inline">
+		<div class="options">
+			{{#if isCreator}}
+				<span class="pointer" {{action 'edit'}}>Edit</span>
+			{{/if}}
+			{{#if isFavorite}}
+				<span class="pointer favorite-full" {{action 'favorite' false}}>{{fa-icon "heart"}}</span>
+			{{else}}
+				<span class="pointer favorite-empty" {{action 'favorite' true}}>{{fa-icon "heart-o"}}</span>
+			{{/if}}
 		</div>
-	{{/if}}
-	<div class="text-container">
-		<div class="review">
-			<span class="name bold">{{song.submittedBy}}</span>
-			<span class="comment-body">{{song.review}}</span>
-			<br>
-			<div> - {{format-date song.createdAt}} </div>
-		</div>
-		<button class="btn comments-btn" {{action 'showComments'}}>Comments ({{uniqueComments.length}})</button>
-		{{#if isShowingComments}}
-			<div class="comment-list">
-				{{#each uniqueComments as |comment|}}
-					<div class="comment">
-						<span class="name bold">{{comment.postedBy}}</span>
-						<span class="comment-body">{{comment.comment}}</span>
-						<div> - {{format-date comment.createdAt}}</div>
-					</div>
-				{{/each}}
-				{{textarea value=newComment placeholder="Thoughts?" class="comment-box form-control"}}
-				{{#if newComment}}
-					<div class="center">
-						<button class="btn btn-sm btn-success" {{action 'submitComment'}}>✓</button>
-						<button class= "btn btn-sm btn-danger" {{action 'discardComment'}}>X</button>
+		<div class="topline">
+			<div class="play-button inline">
+				<span {{action 'play' 'song'}}>{{fa-icon "play-circle"}}</span>
+				{{#if song.hasVideo}}
+					<div class="pointer play-video" {{action 'play' 'video'}}>
+						Video {{fa-icon 'fa fa-youtube-play'}}
 					</div>
 				{{/if}}
 			</div>
-		{{/if}}
-		<hr>
-		<div class="tag-list">
+			<div class="song-attributes inline">
+				<div class="title">{{song.title}}</div>
+				<div class="artist pointer" {{action 'searchText' song.artist}}>{{song.artist}}</div>
+				<div class="album">{{song.album}} ({{song.year}})</div>
+			</div>
+		</div>
+		<div class="tags top-margin">
 			{{#each uniqueTags as |tag|}}
-				<button class="btn btn-sm btn-tag" {{action 'searchText' tag.name}}>{{tag.name}}</button>
+				<button class="btn btn-sm" {{action 'searchText' tag.name}}>{{tag.name}}</button>
 			{{/each}}
-			<button class="btn btn-sm btn-tag" {{action 'showTagForm'}}>Tag {{fa-icon "plus-circle"}}</button>
+			<button class="btn btn-sm" {{action 'showTagForm'}}>Tag {{fa-icon "plus-circle"}}</button>
 			{{#if isShowingTagForm}}
 				<div class="submit-tag-wrapper">
 					{{tag-button tagCollection=tagCollection submitTag='submitTag'}}
+				</div>
+			{{/if}}
+		</div>
+		<div class="review top-margin">
+			<span class="bold">{{song.submittedBy}}</span>
+			<span>{{song.review}}</span>
+			<div> - {{format-date song.createdAt}}</div>
+		</div>
+		<div class="comments top-margin">
+			<button class="btn btn-sm full-width" {{action 'showComments'}}>Comments ({{uniqueComments.length}})</button>
+			{{#if isShowingComments}}
+				<div class="comment-list top-margin">
+					{{#each uniqueComments as |comment|}}
+						<div class="comment">
+							<span class="name bold">{{comment.postedBy}}</span>
+							<span class="comment-body">{{comment.comment}}</span>
+							<div> - {{format-date comment.createdAt}}</div>
+						</div>
+					{{/each}}
+					{{textarea value=newComment placeholder="Thoughts?" class="comment-box form-control"}}
+					{{#if newComment}}
+						<div class="center">
+							<button class="btn btn-sm btn-success" {{action 'submitComment'}}>✓</button>
+							<button class= "btn btn-sm btn-danger" {{action 'discardComment'}}>X</button>
+						</div>
+					{{/if}}
 				</div>
 			{{/if}}
 		</div>

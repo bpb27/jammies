@@ -1,13 +1,12 @@
 TODO:
 BEFORE RELEASE
-- Add videos showing how to submit
 - Favorites
 - Editing submissions
 - Make authed and non-auth paths
 - Link to single submission
 - Play all youtube
 - Small browser width issues with navbar, columns, song submission
-- Get all tests to work plus solid testing coverage 
+- Get all tests to work plus solid testing coverage
 
 Nice to have:
 - New notification system

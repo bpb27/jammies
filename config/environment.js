@@ -4,11 +4,11 @@ module.exports = function(environment) {
   var ENV = {
     modulePrefix: 'jammies',
     environment: environment,
-    
+
     contentSecurityPolicy: {
-      'connect-src': "'self' https://auth.firebase.com wss://*.firebaseio.com https://api.spotify.com https://content.googleapis.com", 
+      'connect-src': "'self' https://auth.firebase.com wss://*.firebaseio.com https://api.spotify.com https://content.googleapis.com",
       'font-src': "'self' data: fonts.gstatic.com https://maxcdn.bootstrapcdn.com/",
-      'img-src': "'self' https://i.scdn.co/image/ https://lh3.googleusercontent.com",
+      'img-src': "'self' https://i.scdn.co/image/ https://lh3.googleusercontent.com https://lh5.googleusercontent.com",
       'style-src': "'self' 'unsafe-inline' fonts.googleapis.com https://maxcdn.bootstrapcdn.com",
       'frame-src': "'self' https://*.firebaseio.com https://embed.spotify.com https://open.spotify.com/ http://www.youtube.com/ https://www.youtube.com/embed/ https://w.soundcloud.com/",
       'script-src': "'self' 'unsafe-eval' https://*.firebaseio.com https://maxcdn.bootstrapcdn.com"

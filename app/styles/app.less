@@ -64,13 +64,10 @@
 .image-background {
     position: fixed;
     right: 0;
+    bottom: 0;
     z-index: -100;
-    height: 100%;
-    -moz-transform: scaleX(-1);
-    -o-transform: scaleX(-1);
-    -webkit-transform: scaleX(-1);
-    transform: scaleX(-1);
-    filter: FlipH;
+    width: 100%;
+    -webkit-filter: blur(5px);
 }
 
 .background-image-bottom {
@@ -244,76 +241,76 @@
         }
     }
 
-    .music-content {
-        margin-bottom: 30px;
-        border: 3px solid black;
-
-        .title, .album, .artist, .video {
-            // background-color: rgba(90, 90, 90, 1);
-            background-color: #009ABE;
-            font-size: 1.3em;
-            font-weight: 200;
-            color: white;
-            padding: 7px 10px;
-            text-align: center;
-        }
-
-        .artist {
-            border-bottom: 3px solid black;
-        }
-
-        .album {
-            border-top: 3px solid black;
-        }
-
-        .video {
-            background-color: #EA6060;
-        }
-
-        .review {
-            font-size: 15px;
-        }
-
-        .comments-btn {
-            width: 100%;
-            margin-top: 10px;
-        }
-
-        .text-container {
-            background-color: rgb(205, 205, 205);
-            border-top: 3px solid black;
-            padding: 15px;
-            font-size: 0.9em;
-
-            .comment-list {
-                margin-top: 20px;
-
-                .comment {
-                    margin-bottom: 10px;
-                    padding: 10px;
-                    background-color: #C0C0C0;
-                }
-
-                .comment-box {
-                    margin: 20px 0 10px 0;
-                }
-
-                .btn-sm {
-                    width: 30%;
-                }
-            }
-
-            .tag-list {
-                margin-top: 10px;
-
-                .btn-sm {
-                    margin-bottom: 4px;
-                }
-
-            }
-
-        }
-    }
+    // .music-content {
+    //     margin-bottom: 30px;
+    //     border: 3px solid black;
+    //
+    //     .title, .album, .artist, .video {
+    //         // background-color: rgba(90, 90, 90, 1);
+    //         background-color: #009ABE;
+    //         font-size: 1.3em;
+    //         font-weight: 200;
+    //         color: white;
+    //         padding: 7px 10px;
+    //         text-align: center;
+    //     }
+    //
+    //     .artist {
+    //         border-bottom: 3px solid black;
+    //     }
+    //
+    //     .album {
+    //         border-top: 3px solid black;
+    //     }
+    //
+    //     .video {
+    //         background-color: #EA6060;
+    //     }
+    //
+    //     .review {
+    //         font-size: 15px;
+    //     }
+    //
+    //     .comments-btn {
+    //         width: 100%;
+    //         margin-top: 10px;
+    //     }
+    //
+    //     .text-container {
+    //         background-color: rgb(205, 205, 205);
+    //         border-top: 3px solid black;
+    //         padding: 15px;
+    //         font-size: 0.9em;
+    //
+    //         .comment-list {
+    //             margin-top: 20px;
+    //
+    //             .comment {
+    //                 margin-bottom: 10px;
+    //                 padding: 10px;
+    //                 background-color: #C0C0C0;
+    //             }
+    //
+    //             .comment-box {
+    //                 margin: 20px 0 10px 0;
+    //             }
+    //
+    //             .btn-sm {
+    //                 width: 30%;
+    //             }
+    //         }
+    //
+    //         .tag-list {
+    //             margin-top: 10px;
+    //
+    //             .btn-sm {
+    //                 margin-bottom: 4px;
+    //             }
+    //
+    //         }
+    //
+    //     }
+    // }
 
     .tags-sidebar {
 
@@ -325,27 +322,16 @@
         padding: 5px 0;
         background-color: #434141;
 
-
         &.tags-sidebar-left {
-            left: -140px;
-            transition: left 1.5s;
+            left: 0;
             border-top-right-radius: 10px;
             border-bottom-right-radius: 10px;
-
-            &:hover {
-                left: 0;
-            }
         }
 
         &.tags-sidebar-right {
-            right: -140px;
-            transition: right 1.5s;
+            right: 0;
             border-top-left-radius: 10px;
             border-bottom-left-radius: 10px;
-
-            &:hover {
-                right: 0;
-            }
         }
 
         .tags-btn-container {
@@ -353,24 +339,24 @@
             button {
                 display: block;
                 text-align: left;
-                width: 150px;
-                max-width: 150px;
+                width: 170px;
+                max-width: 170px;
                 overflow-x: hidden;
                 border: none;
                 border-radius: 0;
                 background-color: #434141;
 
 
-                .badge {
-                    margin-right: 8px;
-                    font-family: sans-serif;
-                    background-color: #C5C5C5;
-                    color: #434141;
+                .tag-tally {
+                  padding: 5px;
+                  background: gray;
+                  margin-right: 5px;
                 }
 
                 .tags-sidebar-label {
                     font-size: 11px;
                     text-transform: capitalize;
+                    letter-spacing: 1px;
                 }
 
             }
@@ -405,20 +391,18 @@
         }
     }
 
-    .col-md-6 {
+    .col-md-8 {
       padding: 20px;
-      background-color: rgba(196, 196, 196, 0.78);
-      border-radius: 10px;
+      background-color: rgba(196, 196, 196, 0.27);
+      border-radius: 5px;
     }
 
-    h6 {
-        font-size: 16px;
-        font-weight: 700;
+    .header {
+      margin-bottom: 10px;
     }
 
     h5 {
         padding-left: 3px;
-        font-weight: bold;
     }
 
     .ember-checkbox {
@@ -426,13 +410,18 @@
     }
 
     .form-control {
-        margin-bottom: 5px;
-        height: 40px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      height: 40px;
 
-        &.link-input {
-          width: 95%;
-          display: inline-block;
-        }
+      &.ember-text-area {
+        height: 70px;
+      }
+
+      &.link-input {
+        width: 90%;
+        display: inline-block;
+      }
     }
 
     .btn-success {
@@ -441,9 +430,10 @@
 
     .video-demo {
       display: inline-block;
-      padding: 5px;
+      padding: 7px 14px;
+      margin-left: 3px;
       background-color: #333333;
-      border-radius: 10px;
+      border-radius: 20px;
       color: white;
 
       video {
@@ -469,11 +459,219 @@
     // }
 }
 
+#page-songs {
+  .top-margin {
+    margin-top: 20px;
+  }
+
+  .music-entry-component {
+    width: 900px;
+    display: inline-block;
+    font-size: 0;
+    // transition: width 1s;
+    //
+    // &:hover {
+    //   width: 850px;
+    // }
+  }
+
+
+
+  .music-content {
+
+    .music-image-small {
+      max-width: 294px; //border 3px x 2
+    }
+
+    .left, .right {
+      vertical-align: top;
+      border: 3px solid black;
+    }
+
+    .left {
+      width: 300px;
+      margin-right: 20px;
+      position: relative;
+
+      &:hover {
+        .play-album {
+          display: block;
+        }
+      }
+
+      .play-album {
+        font-size: 16px;
+        position: absolute;
+        bottom: 0;
+        background-color: rgba(0, 154, 190, 0.85);
+        color: white;
+        padding: 5px;
+        display: none;
+      }
+    }
+
+    .right {
+      position: relative;
+      width: 59%;
+      padding: 15px;
+      text-align: left;
+      background-color: rgba(255, 255, 255, 0.64);
+      min-height: 300px;
+      font-size: 12px;
+      border-radius: 5px;
+
+      .options {
+        position: absolute;
+        right: 0;
+        top: 0;
+        padding-right: 5px;
+        padding-top: 5px;
+        font-size: 17px;
+
+        .favorite-full {
+          color: #EA6060;
+        }
+
+      }
+
+      .play-button {
+        vertical-align: top;
+
+        .fa-play-circle {
+          font-size: 60px;
+          margin-right: 15px;
+          color: #009ABE;
+          cursor: pointer;
+          display: block;
+
+          &:hover {
+            color: rgb(51,51,51);
+          }
+
+        }
+
+        .play-video {
+          font-size: 14px;
+          margin-top: 10px;
+
+          &:hover {
+            .fa {
+              color: #EA6060;
+            }
+          }
+
+          .fa {
+            color: #434141;
+            margin-left: 3px;
+          }
+        }
+
+      }
+
+      .song-attributes {
+        font-size: 16px;
+        font-weight: bold;
+      }
+
+      .review {
+        font-size: 12px;
+
+        .bold {
+          margin-right: 5px;
+        }
+      }
+
+      .review, .topline {
+        padding: 10px;
+        letter-spacing: 1px;
+      }
+
+      .comment-list {
+        .comment {
+          padding: 5px;
+          margin: 10px;
+          letter-spacing: 1px;
+          background-color: rgba(216, 216, 216, 0.63);
+          border-radius: 3px;
+        }
+
+        .comment-box {
+          margin: 20px 0 10px 0;
+        }
+
+        .btn-sm {
+          width: 30%;
+        }
+      }
+
+    }
+  }
+}
+
+#page-user {
+  margin-top: 100px;
+
+  .col-md-3 {
+    img {
+      width: 100%;
+    }
+  }
+
+  .btn {
+    color: white;
+  }
+
+}
+
+.edit-form {
+
+  label {
+    display: block;
+  }
+
+  .col-md-8 {
+    background-color: rgba(208, 196, 196, 0.89);
+
+    .form-control.ember-text-area {
+      height: 70px;
+    }
+    .edit-btns {
+      text-align: center;
+
+      .error {
+        color: #F54040;
+      }
+
+      .btn {
+        margin-top: 0;
+        width: 40%;
+      }
+    }
+  }
+}
+
+.form-background-image {
+  position: absolute;
+  top: 0;
+  z-index: -1;
+  width: 100%;
+}
+
+// Media size rules
+@media screen and (max-width: 1200px) {
+    .tags-sidebar, .control-bar .sorting-btn-container .tags-sidebar-dropdown {
+        display: none;
+    }
+}
 
 //General Atomic Classes
 
 .center {
     text-align: center;
+}
+
+.inline {
+  display: inline-block;
 }
 
 .hide {
@@ -510,6 +708,14 @@
 
 .app-red {
     background-color: #EA6060;
+}
+
+.spotify-green {
+  background-color: #2ebd59;
+}
+
+.youtube-red {
+  background-color: #E62117;
 }
 
 .fa {

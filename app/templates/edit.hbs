@@ -1,0 +1,29 @@
+<div class="container song-form edit-form page-body">
+	<div class="col-md-offset-2 col-md-8">
+    <label>Spotify (e.g. spotify:track:4Xw2beMUQLHDX6Zdp265oX)</label>
+    {{input value=model.spotifyLink placeholder="Spotify URI" class="form-control"}}
+    <label>Youtube (e.g. 6sfLJLZwnQA)</label>
+		{{input value=model.youTubeLink placeholder="YouTube Link" class="form-control"}}
+    <label>Soundcloud (e.g. "https%3A//api.soundcloud.com/tracks/156912134")</label>
+    {{input value=model.soundCloudLink placeholder="SoundCloud Embed Link" class="form-control"}}
+    <label>Review</label>
+    {{textarea value=model.review placeholder="Your thoughts..." class="form-control" required="true"}}
+    <label>Title</label>
+    {{input value=model.title placeholder="Title" class="form-control" required="true"}}
+    <label>Artist</label>
+    {{input value=model.artist placeholder="Artist" class="form-control" required="true"}}
+    <label>Album</label>
+    {{input value=model.album placeholder="Album" class="form-control" required="true"}}
+    <label>Year</label>
+    {{input value=model.year placeholder="Year" class="form-control" required="true"}}
+    <div class="edit-btns">
+      {{#if error}}
+        <h4 class="error">{{error}}</h4>
+      {{/if}}
+      <button class="btn btn-success" {{action 'submit'}}>Update</button>
+      <button class="btn btn-warning" {{action 'discard'}}>Nevermind</button>
+    </div>
+  </div>
+</div>
+
+<!-- <img class="form-background-image" src="assets/images/drummer.jpg" /> -->

@@ -1,13 +1,14 @@
-<div id="page-user">
-	<div class="jumbotron">
-		<h1>{{model.displayName}}</h1>
+<div id="page-user" class="container">
+	<div class="col-md-3 center">
+		<img src={{{session.currentUser.profileImageURL}}} />
+		<h3>{{model.displayName}}</h3>
 	</div>
-	<div class="preferences center">
-		<p>Choose which music source you would prefer to play by default:</p>
-		<button class="btn" {{action 'changeSourceDefault' 'spotify'}}> 
+	<div class="col-md-offset-1 col-md-8">
+		<h4>Choose which music source you would prefer to play by default:</h4>
+		<button class="btn spotify-green" {{action 'changeSourceDefault' 'spotify'}}>
 			Spotify<span class="selected {{if spotify 'selected' 'hide'}}">{{fa-icon "check"}}</span>
 		</button>
-		<button class="btn" {{action 'changeSourceDefault' 'youtube'}}>
+		<button class="btn youtube-red" {{action 'changeSourceDefault' 'youtube'}}>
 			YouTube <span class="selected {{if youtube 'selected' 'hide'}}">{{fa-icon "check"}}</span>
 		</button>
 	</div>
