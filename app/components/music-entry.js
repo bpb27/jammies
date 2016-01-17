@@ -75,6 +75,10 @@ export default Ember.Component.extend({
 		play: function (type) {
 			if (type === 'album' && !this.get('song.albumLink'))
 				return;
+
+			if (type === 'album')
+				return this.toggleProperty('isShowingAlbum');
+
 			this.sendAction('loadPlayer', this.get('song'), type);
 		},
 

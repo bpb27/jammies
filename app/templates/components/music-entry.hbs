@@ -1,8 +1,15 @@
 <div class="music-content top-margin">
 	<div class="left inline" {{action 'play' 'album'}}>
-		<img class="music-image-small {{if song.albumLink 'pointer'}}" src="{{imageToDisplay}}">
+		<img class="music-image-small {{if song.albumLink 'pointer'}} {{if isShowingAlbum 'hide'}}" src="{{imageToDisplay}}">
 		{{#if song.albumLink}}
-			<div class="pointer play-album full-width">Play Album</div>
+			{{#if isShowingAlbum}}
+				<div class="pointer hide-album full-width">Hide Album</div>
+				<div class="spotify-album">
+					<iframe src="https://embed.spotify.com/?uri={{{song.albumLink}}}" frameborder="0" height="380" width="294"></iframe>
+				</div>
+			{{else}}
+				<div class="pointer play-album full-width">Play Album</div>
+			{{/if}}
 		{{/if}}
 	</div>
 	<div class="right inline">
