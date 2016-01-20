@@ -53,6 +53,12 @@ export default Ember.Service.extend({
 				.then(function(user){
 					console.log(user.get('displayName') + ' has signed in.');
 					this.set('user', user);
+
+					if (user.set && user.save) {
+						user.set('lastVisit', new Date());
+						user.save();
+					}
+
 				}.bind(this));
 		}
 

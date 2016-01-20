@@ -60,8 +60,7 @@ export default Ember.Controller.extend({
 
 		return {
 
-			//Song data
-			album: this.get('album'),
+			album: this.get('album') || 'Unreleased',
 			artist: this.get('artist'),
 			createdAt: new Date(),
 			review: this.get('review'),
@@ -71,13 +70,11 @@ export default Ember.Controller.extend({
 			video: this.get('hasVideo'),
 			year: this.get('year'),
 
-			//Links
 			albumLink: this.get('albumLink'),
 			spotifyLink: this.get('spotify') ? 'spotify:track:' + this.determineSpotifyId(this.get('spotify')) : undefined,
 			soundCloudLink: this.get('soundcloud'),
 			youTubeLink: this.determineYoutubeId(this.get('youtube')),
 
-			//User data
 			submittedBy: this.get('session.currentUser.displayName'),
 			submittedByID: this.get('userInformation.user')['id']
 
@@ -163,6 +160,10 @@ export default Ember.Controller.extend({
 
 		if (!record.spotifyLink && !record.youTubeLink && !record.soundCloudLink)
 			error = 'Provide a song link, madam.';
+		else if (record.spotifyLink && record.spotifyLink.indexOf('spotify:track') !== 0)
+			error = 'That Spotify link looks fishy, señor.';
+		else if (record.youTubeLink && record.youTubeLink.length < 11)
+			error = 'That Youtube link looks fishy, señor.';
 		else if (!record.title || !record.artist)
 			error = 'Title and artist, madam.';
 		else if (!record.review)
