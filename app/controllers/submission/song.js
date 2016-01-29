@@ -45,6 +45,8 @@ export default Ember.Controller.extend({
 			return link;
 		if (link.indexOf('=') !== -1)
 			return link.split('=')[1];
+		if (link.indexOf('youtu.be') !== -1)
+			return link.split('/')[link.split('/').length - 1];
 		return link;
 	},
 
@@ -64,7 +66,7 @@ export default Ember.Controller.extend({
 			artist: this.get('artist'),
 			createdAt: new Date(),
 			review: this.get('review'),
-			image: this.get('image'),
+			image: this.get('image').indexOf('vinylcover') === -1 ? this.get('image') : undefined,
 			title: this.get('title'),
 			totalPlays: 1,
 			video: this.get('hasVideo'),

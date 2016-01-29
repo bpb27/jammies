@@ -17,16 +17,17 @@
 			</video>
 		</div>
 
+		{{#if youtube}}
+			<h5>Video? {{input type="checkbox" name="Video" checked=hasVideo}}</h5>
+		{{/if}}
+
 		{{input value=youtube placeholder="YouTube Link" class="form-control link-input"}}
 		<div class="video-demo">?
 			<video autoplay loop muted>
 				<source src="assets/videos/vid-youtube.mp4" type="video/mp4">
 			</video>
 		</div>
-		{{#if youtube}}
-			<h5>Video? {{input type="checkbox" name="Video" checked=hasVideo}}</h5>
-		{{/if}}
-
+		
 		{{input value=soundcloud placeholder="SoundCloud Embed Link" class="form-control link-input"}}
 		<div class="video-demo">?
 			<video autoplay loop muted>

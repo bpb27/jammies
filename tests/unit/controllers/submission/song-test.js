@@ -36,9 +36,11 @@ test('Determine youtube id correctly parses input', function (assert) {
 	var controller = this.subject();
 
 	var link = 'https://www.youtube.com/watch?v=bw3S1dlsGzU';
+	var link2 = 'https://youtu.be.com/bw3S1dlsGzU';
 	var id = 'bw3S1dlsGzU';
 
 	assert.equal(controller.determineYoutubeId(link), id);
+	assert.equal(controller.determineYoutubeId(link2), id);
 	assert.equal(controller.determineYoutubeId(id), id);
 
 });
@@ -149,7 +151,7 @@ function dataMatch (results, submissionToMatch, assert) {
   });
 
   assert.ok(results['createdAt'], 'Created At');
-  
+
 }
 
 var spotifyOnlyFormData = {
