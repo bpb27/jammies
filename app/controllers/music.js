@@ -9,11 +9,9 @@ export default Ember.Controller.extend({
 	query: '',
 	playAllLinks: '',
 	showOnlyProperty: '',
-	showOnlyFavorites: false,
-	showOnlyVideos: false,
 	songLimit: 27,
 	sortAscending: true,
-	sortProperties: ['createdAt'],
+	sortProperty: 'createdAt',
   artistSort: 'name',
   tagSort: 'name',
 
@@ -60,7 +58,7 @@ export default Ember.Controller.extend({
 
 	filteredContent: function () {
     	var music = this.get('model.songs');
-    	var query = Ember.String.htmlSafe(this.get('query')).string;
+    	var query = this.get('query').replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
     	var rx = new RegExp(query, 'gi');
 			var favorites = this.get('userInformation.user.favorites');
       var songs = music.filter(function(song) {
@@ -73,8 +71,8 @@ export default Ember.Controller.extend({
       //songs = this.setMusicColumns(songs); //deal with small browser width
 
       return songs;
-
-  	}.property('model.songs.isUpdating', 'query', 'sortProperties.[]', 'sortAscending', 'showOnlyProperty'),
+			
+  	}.property('model.songs.isUpdating', 'query', 'sortProperty', 'sortAscending', 'showOnlyProperty'),
 
   	gatherPlayAllLinks: function (music) {
       var all = 'spotify:trackset:All Jams:';
@@ -184,9 +182,9 @@ export default Ember.Controller.extend({
    },
 
   	sortAndLimitModel: function (model) {
-  		model = model.sortBy(this.get('sortProperties')[0]);
+  		model = model.sortBy(this.get('sortProperty'));
 
-  		if (this.get('sortAscending'))
+  		if (this.get('sortAscending') || this.get('sortProperty') === 'lastComment')
   			model.reverse();
 
   		return model.slice(0, this.get('songLimit'));
@@ -262,12 +260,13 @@ export default Ember.Controller.extend({
       },
 
   		searchText: function (text) {
-         if (this.get('query') === text)
-            this.set('query', '');
-         else
-            this.set('query', text);
+	    	if (this.get('query') === text)
+	      	this.set('query', '');
+	      else
+	      	this.set('query', text);
 
-         this.scrollUp();
+				this.set('showOnlyProperty', '');
+				this.scrollUp();
       },
 
       showOnly: function (property) {
@@ -289,10 +288,10 @@ export default Ember.Controller.extend({
 			},
 
       sortBy: function (property) {
-  			if (this.get('sortProperties')[0] === property)
+  			if (this.get('sortProperty') === property)
   				this.set('sortAscending', !this.get('sortAscending'));
   			else
-  				this.set('sortProperties', [property]);
+  				this.set('sortProperty', property);
   		},
 
       sortSidebar: function (field, sort) {
@@ -338,6 +337,46 @@ export default Ember.Controller.extend({
          }.bind(this));
 
       },
-  	}
+  	},
+
+		showOnlyVideos: function () {
+			return this.get('showOnlyProperty') === 'videos';
+		}.property('showOnlyProperty'),
+
+		showOnlyFavorites: function () {
+			return this.get('showOnlyProperty') === 'favorites';
+		}.property('showOnlyProperty'),
+
+		showOnlyYoutube: function () {
+			return this.get('showOnlyProperty') === 'youtube';
+		}.property('showOnlyProperty'),
+
+		showOnlySpotify: function () {
+			return this.get('showOnlyProperty') === 'spotify';
+		}.property('showOnlyProperty'),
+
+		showOnlySoundcloud: function () {
+			return this.get('showOnlyProperty') === 'soundcloud';
+		}.property('showOnlyProperty'),
+
+		sortByArtist: function () {
+			return this.get('sortProperty') === 'artist';
+		}.property('sortProperty'),
+
+		sortByLastComment: function () {
+			return this.get('sortProperty') === 'lastComment';
+		}.property('sortProperty'),
+
+		sortByCreatedAt: function () {
+			return this.get('sortProperty') === 'createdAt';
+		}.property('sortProperty'),
+
+		sortBySubmittedBy: function () {
+			return this.get('sortProperty') === 'submittedBy';
+		}.property('sortProperty'),
+
+		sortByYear: function () {
+			return this.get('sortProperty') === 'year';
+		}.property('sortProperty')
 
 });

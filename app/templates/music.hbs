@@ -10,40 +10,44 @@
 
 	<div class="control-bar">
   		<div class="search-container">
-			{{input
-				type=text
-				value=query
-				class='search-box'
-				placeholder='Search title, artist, album, tags, user...'
-			}}
-		</div>
-		<div class="sorting-btn-container">
-			{{#link-to 'submission.song'}}<button class="btn sorting-btn">Add Tunes</button>{{/link-to}}
-			<button class="btn sorting-btn play-all-btn" {{action 'playAll'}}>Play All</button>
-			<div class="dropdown">
-				<a id="dLabel" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">
-					<button class="btn sorting-btn">
-						Show Only
-						<span class="caret"></span>
-					</button>
-				</a>
-				<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-					<li {{action 'showOnly' 'videos'}}>Videos</li>
-					<li {{action 'showOnly' 'favorites'}}>Favorites</li>
-					<li {{action 'showOnly' 'youtube'}}>Youtube Links</li>
-					<li {{action 'showOnly' 'spotify'}}>Spotify Links</li>
-					<li {{action 'showOnly' 'soundcloud'}}>Soundcloud Links</li>
-				</ul>
+				<div class="query-present">
+					{{#if query}}{{fa-icon 'fa-check-circle'}}{{/if}}
+				</div>
+				{{input
+					type=text
+					value=query
+					class='search-box'
+					placeholder='Search title, artist, album, tags, user...'
+				}}
 			</div>
+			<div class="sorting-btn-container">
+				{{#link-to 'submission.song'}}<button class="btn sorting-btn">Add Tunes</button>{{/link-to}}
+				<button class="btn sorting-btn play-all-btn" {{action 'playAll'}}>Play All</button>
+				<div class="dropdown">
+					<a id="dLabel" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">
+						<button class="btn sorting-btn">
+							Show Only
+							<span class="caret"></span>
+						</button>
+					</a>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+						<li {{action 'showOnly' 'videos'}} class="{{if showOnlyVideos 'selected'}}">Videos</li>
+						<li {{action 'showOnly' 'favorites'}} class="{{if showOnlyFavorites 'selected'}}">Favorites</li>
+						<li {{action 'showOnly' 'youtube'}} class="{{if showOnlyYoutube 'selected'}}">Youtube Links</li>
+						<li {{action 'showOnly' 'spotify'}} class="{{if showOnlySpotify 'selected'}}">Spotify Links</li>
+						<li {{action 'showOnly' 'soundcloud'}} class="{{if showOnlySoundcloud 'selected'}}">Soundcloud Links</li>
+					</ul>
+				</div>
 			<div class="dropdown">
 				<a id="dLabel" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">
 					<button class="btn sorting-btn">Sort By<span class="caret"></span></button>
 				</a>
 				<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-					<li {{action 'sortBy' 'artist'}}>Artist</li>
-					<li {{action 'sortBy' 'createdAt'}}>Date Added</li>
-					<li {{action 'sortBy' 'submittedBy'}}>Submitted By</li>
-					<li {{action 'sortBy' 'year'}}>Year</li>
+					<li {{action 'sortBy' 'artist'}} class="{{if sortByArtist 'selected'}}">Artist</li>
+					<li {{action 'sortBy' 'createdAt'}} class="{{if sortByCreatedAt 'selected'}}">Date Added</li>
+					<li {{action 'sortBy' 'lastComment'}} class="{{if sortByLastComment 'selected'}}">Latest Comments</li>
+					<li {{action 'sortBy' 'submittedBy'}} class="{{if sortBySubmittedBy 'selected'}}">Submitted By</li>
+					<li {{action 'sortBy' 'year'}} class="{{if sortByYear 'selected'}}">Year</li>
 				</ul>
 			</div>
 			<div class="dropdown tags-sidebar-dropdown">
@@ -87,7 +91,7 @@
 			<div class="tags-sidebar tags-sidebar-left">
 				<div class="tags-btn-container">
 					{{#each tagList as |item|}}
-						<button class="btn btn-primary btn-sm" {{action 'searchText' item.name}}>
+						<button class="btn btn-sm" {{action 'searchText' item.name}}>
 							<span class="tag-tally">{{item.tally}}</span>
 							<span class="tags-sidebar-label">{{item.name}}</span>
 						</button>
@@ -98,7 +102,7 @@
 			<div class="tags-sidebar tags-sidebar-right">
 				<div class="tags-btn-container">
 					{{#each aristList as |item|}}
-						<button class="btn btn-primary btn-sm" {{action 'searchText' item.name}}>
+						<button class="btn btn-sm" {{action 'searchText' item.name}}>
 							<span class="tag-tally">{{item.tally}}</span>
 							<span class="tags-sidebar-label">{{item.name}}</span>
 						</button>
