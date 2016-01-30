@@ -12,21 +12,21 @@ export default DS.Model.extend({
 	type: DS.attr('string'),
 	video: DS.attr('boolean'),
 	year: DS.attr('number'),
-	
+
 	// Link data
 	albumLink: DS.attr('string'),
 	soundCloudLink: DS.attr('string'),
 	spotifyLink: DS.attr('string'),
 	youTubeLink: DS.attr('string'),
-	
+
 	// User data
 	submittedBy: DS.attr('string'),
 	submittedByID: DS.attr('string'),
-	
+
 	// HasMany data
 	comments: DS.hasMany('comment', { async: true }),
 	tags: DS.hasMany('tag', { async: true }),
-	
+
 	// Computed properties
 	hasVideo: function () {
 		if (this.get('type') && this.get('type') !== 'Song')
@@ -62,12 +62,13 @@ export default DS.Model.extend({
 			return this.get('spotifyLink').split(':')[2];
 	}.property('spotifyLink'),
 
-	updatedAt: function () {
+	lastComment: function () {
 		return this.get('comments').map(function(comment){
 			return comment.get('createdAt');
 		})
 		.sort()
-		.objectAt(0);
+		.reverse()
+		.objectAt(0) || new Date('1990');
 	}.property('comments.[]'),
 
 	returnPlayPayload: function (type, musicSource) {
@@ -75,12 +76,12 @@ export default DS.Model.extend({
 		return {
 			link: source.link,
 			albumLink: this.get('albumLink'),
-			linkType: source.type, 
-			title: this.get('title'), 
-			artist: this.get('artist'), 
+			linkType: source.type,
+			title: this.get('title'),
+			artist: this.get('artist'),
 			identity: this.get('id'),
 			isAlbum: type === 'album'
-        };
+    };
 	},
 
 	returnPreferredLink: function (source) {

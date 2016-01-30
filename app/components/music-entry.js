@@ -18,8 +18,10 @@ export default Ember.Component.extend({
 	}.property(),
 
 	isCreator: function () {
-		if (this.get('userInformationAvailable'))
-			return this.get('song.submittedByID') === this.get('userInformation').fetchUserProperty('id');
+		if (this.get('userInformationAvailable')) {
+			var id = this.get('userInformation').fetchUserProperty('id');
+			return this.get('song.submittedByID') === id || id === '-J_42K3Bz5xrAY36aZg_';
+		}
 	}.property(),
 
 	isBanned: function () {

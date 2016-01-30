@@ -151,8 +151,17 @@
             border-radius: 3px;
             padding: 8px;
             padding-left: 15px;
+            margin-left: 5px;
             border: 0;
             display: inline-block;
+        }
+
+        .query-present {
+          width: 35px;
+          text-align: center;
+          color: white;
+          font-size: 25px;
+          vertical-align: bottom;
         }
     }
 
@@ -241,86 +250,14 @@
         }
     }
 
-    // .music-content {
-    //     margin-bottom: 30px;
-    //     border: 3px solid black;
-    //
-    //     .title, .album, .artist, .video {
-    //         // background-color: rgba(90, 90, 90, 1);
-    //         background-color: #009ABE;
-    //         font-size: 1.3em;
-    //         font-weight: 200;
-    //         color: white;
-    //         padding: 7px 10px;
-    //         text-align: center;
-    //     }
-    //
-    //     .artist {
-    //         border-bottom: 3px solid black;
-    //     }
-    //
-    //     .album {
-    //         border-top: 3px solid black;
-    //     }
-    //
-    //     .video {
-    //         background-color: #EA6060;
-    //     }
-    //
-    //     .review {
-    //         font-size: 15px;
-    //     }
-    //
-    //     .comments-btn {
-    //         width: 100%;
-    //         margin-top: 10px;
-    //     }
-    //
-    //     .text-container {
-    //         background-color: rgb(205, 205, 205);
-    //         border-top: 3px solid black;
-    //         padding: 15px;
-    //         font-size: 0.9em;
-    //
-    //         .comment-list {
-    //             margin-top: 20px;
-    //
-    //             .comment {
-    //                 margin-bottom: 10px;
-    //                 padding: 10px;
-    //                 background-color: #C0C0C0;
-    //             }
-    //
-    //             .comment-box {
-    //                 margin: 20px 0 10px 0;
-    //             }
-    //
-    //             .btn-sm {
-    //                 width: 30%;
-    //             }
-    //         }
-    //
-    //         .tag-list {
-    //             margin-top: 10px;
-    //
-    //             .btn-sm {
-    //                 margin-bottom: 4px;
-    //             }
-    //
-    //         }
-    //
-    //     }
-    // }
-
     .tags-sidebar {
-
         position: absolute;
         top: 150px;
         max-width: 200px;
         overflow: hidden;
         z-index: 10;
         padding: 5px 0;
-        background-color: #434141;
+        background-color: rgba(35, 35, 36, 0.76);
 
         &.tags-sidebar-left {
             left: 0;
@@ -344,7 +281,8 @@
                 overflow-x: hidden;
                 border: none;
                 border-radius: 0;
-                background-color: #434141;
+                background-color: transparent;
+                color: white;
 
 
                 .tag-tally {
@@ -469,11 +407,6 @@
     width: 900px;
     display: inline-block;
     font-size: 0;
-    // transition: width 1s;
-    //
-    // &:hover {
-    //   width: 850px;
-    // }
   }
 
 
@@ -551,15 +484,20 @@
       .play-button {
         vertical-align: top;
 
+
         .fa-play-circle {
           font-size: 60px;
           margin-right: 15px;
           color: #009ABE;
           cursor: pointer;
           display: block;
+          -webkit-transition: width 2s, height 2s, color 1s, -webkit-transform 2s;
+          transition: width 2s, height 2s, color 1s, transform 2s;
 
           &:hover {
             color: rgb(51,51,51);
+            -webkit-transform: scale(1.2);
+            transform: scale(1.2);
           }
 
         }
@@ -615,6 +553,12 @@
 
         .btn-sm {
           width: 30%;
+        }
+      }
+
+      .tags {
+        .btn-sm {
+          margin-bottom: 5px;
         }
       }
 
@@ -679,6 +623,9 @@
 }
 
 //General Atomic Classes
+.dropdown-menu .selected {
+  text-decoration: underline;
+}
 
 .center {
     text-align: center;
