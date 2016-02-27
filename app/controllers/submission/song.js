@@ -40,14 +40,16 @@ export default Ember.Controller.extend({
 		return link;
 	},
 
-	determineYoutubeId: function (link) {
-		if (!link)
-			return link;
-		if (link.indexOf('=') !== -1)
-			return link.split('=')[1];
-		if (link.indexOf('youtu.be') !== -1)
-			return link.split('/')[link.split('/').length - 1];
-		return link;
+	determineYoutubeId: function (url) {
+		if (url && url.length === 11){
+			return url;
+		}
+		if (url) {
+				var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
+        var match = url.match(regExp);
+
+				return match && match[2].length === 11 ? match[2] : undefined;
+    }
 	},
 
 	errorErase: function () {
@@ -185,16 +187,28 @@ export default Ember.Controller.extend({
 			if (!this.get('userInformation.user'))
 				return this.set('error', 'Please sign in to submit a song.');
 
+			var form = this.gatherFormData();
+			
+			if (this.validate(form)) {	
+				if (form.spotifyLink && this.get('model') && this.get('model').filter) {
+					var match = this.get('model').filter(function(song){
+						return form.spotifyLink === song.get('spotifyLink');
+					});
+
+					if (match.length)
+						return this.set('error', match[0].get('submittedBy') + ' submitted that song ' + moment(match[0].get('createdAt')).fromNow());
+				}
+
+				this.saveRecord(form);
+			}
+
 			// if (this.get('youtube') && !this.get('spotify')) {
 			// 	var query = this.determineSpotifyQuery();
 			// 	if (query) {
 			// 		this.querySpotify(query)
 			// 	}
 			// }
-
-			var form = this.gatherFormData();
-			if (this.validate(form))
-				this.saveRecord(form);
+				
 		},
 
 		discard: function () {
