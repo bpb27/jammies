@@ -10,7 +10,7 @@
 
 	<div class="control-bar">
   		<div class="search-container">
-				<div class="query-present">
+				<div class="query-present" {{action 'searchText' ''}}>
 					{{#if query}}{{fa-icon 'fa-check-circle'}}{{/if}}
 				</div>
 				{{input

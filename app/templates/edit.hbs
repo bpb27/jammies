@@ -4,6 +4,11 @@
     {{input value=model.spotifyLink placeholder="Spotify URI" class="form-control"}}
     <label>Youtube (e.g. 6sfLJLZwnQA)</label>
 		{{input value=model.youTubeLink placeholder="YouTube Link" class="form-control"}}
+    {{#if model.youTubeLink}}
+      <label class="video-checkbox">Video?
+        {{input type="checkbox" name="Video" checked=model.video}}
+      </label>
+    {{/if}}
     <label>Soundcloud (e.g. "https%3A//api.soundcloud.com/tracks/156912134")</label>
     {{input value=model.soundCloudLink placeholder="SoundCloud Embed Link" class="form-control"}}
     <label>Review</label>
